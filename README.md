@@ -95,7 +95,9 @@ Bootstrap is the css front-end framework used.
 
 ### [To Be Determined]()
 ```
-Continuous Integration(CI) / Continuous Delivery(CD) tool used
+Our options for Continuous Integration(CI) / Continuous Delivery(CD) tools
+include heroku and netlify. We are still weighing the merits and demerits
+of both tools to choose one.
 ```
 
 ### [pip](https://pypi.python.org/pypi/pip)

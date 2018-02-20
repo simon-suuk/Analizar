@@ -4,7 +4,7 @@ import facebook
 facebook page"""
 def publish_created_post_to_facebook_page():
     api = get_api()
-    msg = "Welcome to KontentHub, a Social Media Management Platform!"
+    msg = "Welcome to an Insightful Social Media Management Platform!"
     status = api.put_wall_post(msg)
     return status
 

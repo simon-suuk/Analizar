@@ -3,11 +3,19 @@ import sys
 
 sys.path.append(os.getcwd())
 
-from flask import Flask, render_template, request, jsonify, json
+from flask import Flask, render_template, request, jsonify, json, redirect
+# import requests
+import facebookinsights as fi
 from models.user_model import UserModel
 from models.base_model import DBSingleton
 
 app = Flask(__name__)
+
+PORT = 5000
+CLIENT_ID = os.environ.get("FACEBOOK_INSIGHTS_CLIENT_ID")
+CLIENT_SECRET = os.environ.get("FACEBOOK_INSIGHTS_CLIENT_SECRET")
+REDIRECT_ROUTE = '/auth/facebook/callback'
+REDIRECT_URI = 'http://localhost:{}'.format(PORT) + REDIRECT_ROUTE
 
 
 @app.before_first_request
@@ -28,9 +36,41 @@ def disconnect_db(err=None):
     DBSingleton.getInstance().close()
 
 
+facebook = fi.oauth.OAuth2Service(
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SECRET,
+    redirect_uri=REDIRECT_URI,
+)
+
+
+@app.route('/auth/facebook')
+def authorization():
+    authorize_url = facebook.get_authorize_url()
+    return redirect(authorize_url)
+
+
+def new_decoder(payload):
+    return json.loads(payload.decode('utf-8'))
+
+
+@app.route(REDIRECT_ROUTE)
+def callback():
+    user_token = facebook.get_access_token(
+        request.args['code'], long_term=True)
+    page_tokens = facebook.get_page_tokens(user_token)
+    return json.loads(page_tokens=page_tokens, decoder=new_decoder)
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+# @app.route('/track_a_published_post', methods=['GET'])
+# def fetch_data():
+#     response = requests.get(
+#         "https://graph.facebook.com/v2.12/1420595431516143/insights/page_fan_adds_unique?access_token=EAACEdEose0cBAPF29B2zOpig3hg2CcqzM0eknd4N2NYqzkTbQr0rCu3vMqUWKnNAiPyqDew70vY1JHzgNxrEhMPn2ZB6IMCldnbZCNvF7ZBedwiYz6SfGUHtotqCSLVLSYytiyuoMNaFS8iFOkirz7Hr7XSspmrElUqjaZBl14aE1nK3wzRTGtOlF2Oc51YZD")
+#     return jsonify(response.text)
 
 
 @app.route('/users/', methods=['POST'])

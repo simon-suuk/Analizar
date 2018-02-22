@@ -4,10 +4,4 @@
 *Release date to be announced (yyyy-mm-dd)*
 
 *Features*
-* ...
-
-*Bug Fixes*
-* ...
-
-*Breaking Changes*
-* ...
+* Prompt Analizar user to give Facebook permission to share the requested information (reading page insights, manage pages) with Analizar

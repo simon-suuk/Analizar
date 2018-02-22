@@ -1,5 +1,6 @@
 import os
 import sys
+import facebook
 
 sys.path.append(os.getcwd())
 
@@ -144,6 +145,8 @@ def delete_fact(_id):
                                           'usersecret': user_record.usersecret,
                                           'is_active': user_record.is_active,
                                           'created_on': user_record.timestamp}}})
+
+
 
 
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")

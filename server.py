@@ -3,11 +3,16 @@ import sys
 
 sys.path.append(os.getcwd())
 
-from flask import Flask, render_template, request, jsonify, json
+from flask import Flask, render_template, request, jsonify, json, redirect, url_for, flash
+from flask_login import LoginManager, login_user, logout_user, current_user
+from services.authentication import OAuthSignIn
 from models.user_model import UserModel
 from models.base_model import DBSingleton
 
 app = Flask(__name__)
+
+login_manager = LoginManager(app)
+login_manager.login_view = 'index'
 
 
 @app.before_first_request
@@ -28,9 +33,45 @@ def disconnect_db(err=None):
     DBSingleton.getInstance().close()
 
 
+@login_manager.user_loader
+def load_user(id):
+    return UserModel.get(UserModel.id == int(id))
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
+@app.route('/authorize/<provider>')
+def oauth_authorize(provider):
+    if not current_user.is_anonymous:
+        return redirect(url_for('index'))
+    oauth = OAuthSignIn.get_provider(provider)
+    return oauth.authorize()
+
+
+@app.route('/callback/<provider>')
+def oauth_callback(provider):
+    if not current_user.is_anonymous:
+        return redirect(url_for('index'))
+    oauth = OAuthSignIn.get_provider(provider)
+    social_id, username, email = oauth.callback()
+    if social_id is None:
+        flash('Authentication failed.')
+        return redirect(url_for('index'))
+    user = UserModel.get(UserModel.social_id == social_id)
+    if not user:
+        user = UserModel.create(social_id=social_id, username=username, email=email, password="test_sikriit",
+                                is_active=True)
+    login_user(user, True)
+    return redirect(url_for('index'))
 
 
 @app.route('/users/', methods=['POST'])

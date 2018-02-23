@@ -5,7 +5,9 @@ from datetime import datetime
 
 
 class UserModel(BaseModel):
-    username = TextField(45)
-    usersecret = TextField(45)
+    social_id = TextField(unique=True)
+    username = TextField()
+    email = TextField(null=True)
+    password = TextField()
     is_active = BooleanField()
     timestamp = DateTimeField(default=datetime.now)

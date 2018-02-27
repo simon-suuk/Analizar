@@ -1,14 +1,16 @@
 import os
 import sys
-import facebook
+
 
 sys.path.append(os.getcwd())
 
-from flask import Flask, render_template, request, jsonify, json
+from flask import Flask, render_template, request, jsonify, json, flash, redirect, url_for
+from flask_bcrypt import Bcrypt
 from models.user_model import UserModel
 from models.base_model import DBSingleton
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 
 
 @app.before_first_request
@@ -146,7 +148,33 @@ def delete_fact(_id):
                                           'is_active': user_record.is_active,
                                           'created_on': user_record.timestamp}}})
 
+# User sign up on Analizar
+@app.route('/signup', methods=['GET', 'POST'])
+def analizar_user_signup():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        company_name = request.form['company_name']
+        industry = request.form['industry']
+        company_size = request.form['company_size']
+
+        hashed_password = bcrypt.generate_password_hash(password)
+        user = UserModel.insert(name=name, email=email, password=hashed_password, company_name=company_name, industry=industry,
+                                company_size=company_size).execute()
+        if user:
+            flash('You have successfully signed up')
+            # return redirect(url_for('analizar_user_signin'))
+        else:
+            flash('Signup failed, please try again', category='error')
+
+    return render_template("signup.html")
 
 
+@app.route('/signin')
+def analizar_user_signin():
+    pass
+    return render_template("signin.html")
 
-app.secret_key = os.environ.get("FLASK_SECRET_KEY")
+
+app.secret_key = 'b\'Lg\xdfP{\xe0\xa7t\xbb\xe0\x06/'

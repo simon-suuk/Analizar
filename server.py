@@ -5,12 +5,17 @@ import sys
 sys.path.append(os.getcwd())
 
 from flask import Flask, render_template, request, jsonify, json, flash, redirect, url_for
-from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, current_user, login_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from models.user_model import UserModel
 from models.base_model import DBSingleton
 
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.init_app(app)
+
+#This will redirect users to the signin view whenever they are required to be signed in.
+login_manager.login_view = 'signin'
 
 
 @app.before_first_request
@@ -148,9 +153,10 @@ def delete_fact(_id):
                                           'is_active': user_record.is_active,
                                           'created_on': user_record.timestamp}}})
 
+
 # User sign up on Analizar
 @app.route('/signup', methods=['GET', 'POST'])
-def analizar_user_signup():
+def user_sign_up():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -159,7 +165,7 @@ def analizar_user_signup():
         industry = request.form['industry']
         company_size = request.form['company_size']
 
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = generate_password_hash(password)
         user = UserModel.insert(name=name, email=email, password=hashed_password, company_name=company_name, industry=industry,
                                 company_size=company_size).execute()
         if user:
@@ -168,13 +174,42 @@ def analizar_user_signup():
         else:
             flash('Signup failed, please try again', category='error')
 
-    return render_template("signup.html")
+    return render_template('signup.html')
+
+
+@login_manager.user_loader
+def load_user(id):
+    return UserModel.select().get(int(id))
 
 
 @app.route('/signin')
-def analizar_user_signin():
+def user_sign_in():
     pass
-    return render_template("signin.html")
+    return render_template('signin.html')
+
+
+@app.route('/dashboard')
+def user_dashboard():
+    pass
+    return render_template('dashboard.html')
+
+
+@app.route('/dashboard/marketing')
+def user_marketing_obj_dashboard():
+    pass
+    return render_template('dashboard_marketing.html')
+
+
+@app.route('/dashboard/user_guide')
+def user_guide_dashboard():
+    pass
+    return render_template('dashboard_userguide.html')
+
+
+@app.route('/dashboard/report')
+def user_report_dashboard():
+    pass
+    return render_template('dashboard_report.html')
 
 
 app.secret_key = 'b\'Lg\xdfP{\xe0\xa7t\xbb\xe0\x06/'

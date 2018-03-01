@@ -32,3 +32,4 @@ build
 __pycache__
 .env
 .idea
+node_modules/

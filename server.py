@@ -4,15 +4,16 @@ import sys
 sys.path.append(os.getcwd())
 
 from flask import Flask, render_template, request, jsonify, json, redirect, url_for, flash
-from flask_login import LoginManager, login_user, logout_user, current_user
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from services.authentication import OAuthSignIn
+import services.graph as graph
 from models.user_model import UserModel
 from models.base_model import DBSingleton
 
 app = Flask(__name__)
 
 login_manager = LoginManager(app)
-login_manager.login_view = 'index'
+login_manager.login_view = 'login'
 
 
 @app.before_first_request
@@ -39,11 +40,39 @@ def load_user(id):
 
 
 @app.route('/')
+@login_required
 def index():
     return render_template('index.html')
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    if request.method == 'GET':
+        return render_template("login.html")
+
+    if request.method == 'POST':
+        social_id = request.form['social_id']
+        password = request.form['password']
+
+        user = None
+        try:
+            user = UserModel.get(UserModel.social_id == social_id, UserModel.password == password)
+        except Exception as ex:
+            print(ex.args)
+
+        if user is None:
+            flash('Authentication failed.')
+            return redirect(url_for('index'))
+
+        login_user(user, True)
+    return redirect(url_for('index'))
+
+
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
@@ -61,17 +90,57 @@ def oauth_authorize(provider):
 def oauth_callback(provider):
     if not current_user.is_anonymous:
         return redirect(url_for('index'))
+
     oauth = OAuthSignIn.get_provider(provider)
-    social_id, username, email = oauth.callback()
+    social_id, username, email, account_data = oauth.callback()
+    page_id = account_data[2].get("id")
+    access_token = account_data[2].get("access_token")
+
+    # print('My Account Page_id: {} My Account Access_token:{}'.format(page_id, access_token))
+
     if social_id is None:
         flash('Authentication failed.')
         return redirect(url_for('index'))
-    user = UserModel.get(UserModel.social_id == social_id)
-    if not user:
-        user = UserModel.create(social_id=social_id, username=username, email=email, password="test_sikriit",
-                                is_active=True)
-    login_user(user, True)
-    return redirect(url_for('index'))
+
+    try:
+        user = UserModel.get(UserModel.social_id == social_id)
+    except Exception as ex:
+        user = UserModel.create(
+            social_id=social_id,
+            username=username,
+            email=email,
+            password="test_sikriit",
+            is_active=True,
+            page_id=page_id,
+            access_token=access_token
+        )
+    return user
+
+
+@app.route('/fetch_page_posts/<edge_name>')
+@login_required
+def fetch_page_posts(edge_name):
+    page = None
+    try:
+        page = graph.Page(current_user.page_id, current_user.access_token)
+        # print("All Post nodes Page: {}".format(page.get_edge("feed")))
+
+    except Exception as ex:
+        print(ex.args)
+        return None
+    return page.get_edge(edge_name)
+
+
+@app.route('/fetch_page_properties/<fields>')
+@login_required
+def fetch_page_properties(fields):
+    page = None
+    try:
+        page = graph.Page(current_user.page_id, current_user.access_token)
+    except Exception as ex:
+        print(ex.args)
+        return None
+    return page.get_node_properties(fields)
 
 
 @app.route('/users/', methods=['POST'])

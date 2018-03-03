@@ -2,7 +2,8 @@ import json
 import os
 
 from rauth import OAuth1Service, OAuth2Service
-from flask import current_app, url_for, request, redirect, session
+from services.graph_api import GraphAPI
+from flask import url_for, request, redirect, session
 
 
 class OAuthSignIn(object):
@@ -62,6 +63,7 @@ class FacebookSignIn(OAuthSignIn):
 
         if 'code' not in request.args:
             return None, None, None
+
         oauth_session = self.service.get_auth_session(
             data={'code': request.args['code'],
                   'grant_type': 'authorization_code',
@@ -69,14 +71,40 @@ class FacebookSignIn(OAuthSignIn):
                   },
             decoder=decode_json
         )
+
+        account_data = self.exchange_access_token_for_page_tokens(oauth_session.access_token)
+
         me = oauth_session.get('me?fields=id,email').json()
+        # print('My access token key is: {}'.format(oauth_session.access_token))
+        # Facebook does not provide username, so the email's user is used instead
         return (
             'facebook$' + me['id'],
-            me.get('email').split('@')[0],  # Facebook does not provide
-            # username, so the email's user
-            # is used instead
-            me.get('email')
+            me.get('email').split('@')[0],
+            me.get('email'),
+            account_data
         )
+
+    def exchange_access_token_for_page_tokens(self, short_term_token):
+        data = GraphAPI().get(
+            'oauth/access_token',
+            grant_type='fb_exchange_token',
+            client_id=self.consumer_id,
+            client_secret=self.consumer_secret,
+            fb_exchange_token=short_term_token,
+        )
+
+        # print('graph data is: {}'.format(data))
+
+        long_term_token = data.get('access_token')
+        # print('long term token is: {}'.format(long_term_token))
+
+        graph = GraphAPI(long_term_token)
+        # print('graph_api data is: {}'.format(graph.__dict__))
+
+        accounts = graph.get('me/accounts')['data']
+        # print('Datatype: {}, Accounts: {}'.format(type(accounts), accounts))
+
+        return accounts
 
 
 class TwitterSignIn(OAuthSignIn):

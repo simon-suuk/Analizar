@@ -11,3 +11,5 @@ class UserModel(BaseModel):
     password = TextField()
     is_active = BooleanField()
     timestamp = DateTimeField(default=datetime.now)
+    page_id = TextField()
+    access_token = TextField()

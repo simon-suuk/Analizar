@@ -1,69 +1,76 @@
-import copy
-import facepy
-from urllib.parse import urlencode
+from collections import namedtuple
+from flask import jsonify, json
+import requests
 
 
-def getdata(obj, key, default=None):
-    if key in obj:
-        return obj[key]['data']
-    else:
-        return default
+class PageOrPost:
+    def __init__(self, page_id, page_token):
+        self.node_id = page_id
+        self.access_token = page_token
 
+    def get_edge(self, edge_name):
+        """
+        To read an edge, you must include both the node ID and the edge name in the path.
+        For example, /page nodes have a /feed edge which
+        can return all Post nodes on a Page
 
-class GraphAPI(facepy.GraphAPI):
-    def __init__(self, *vargs, **kwargs):
-        self.base = []
-        super(GraphAPI, self).__init__(*vargs, **kwargs)
+        :param edge_name:
+        """
+        base_url = "https://graph.facebook.com"
+        version = "v2.12"
+        url = "{base_url}/{version}/{node_id}/{edge_name}?access_token={access_token}".format(
+            base_url=base_url,
+            version=version,
+            node_id=self.node_id,
+            edge_name=edge_name,
+            access_token=self.access_token
+        )
+        response = requests.get(url)
+        return response.json()
 
-    def _segmentize_endpoint(self, endpoint):
-        if not isinstance(endpoint, list):
-            endpoint = [endpoint]
-        return endpoint
+    def get_node_properties(self, *args):
+        """
+        Fields are node properties.
+        The Page node reference indicates which fields
+        you can ask for when reading a Page node.
+        For example, If you wanted to get the about, fan_count, and website fields
 
-    def _resolve_endpoint(self, endpoint, options={}):
-        endpoint = self._segmentize_endpoint(endpoint)
-        resolved_url = "/".join(self.base + endpoint)
-        # remove facepy options, retain everything
-        # that needs to end up in the querystring
-        blacklist = ['path', 'page', 'retry', 'data', 'method', 'relative_url']
-        if options:
-            qs = urlencode({key: value for key, value in options.items() if key not in blacklist})
-            return resolved_url + '?' + qs
-        else:
-            return resolved_url
+        :param args:
+        """
+        base_url = "https://graph.facebook.com"
+        version = "v2.12"
+        url = "{base_url}/{version}/{node_id}?fields={fields}&access_token={access_token}".format(
+            base_url=base_url,
+            version=version,
+            node_id=self.node_id,
+            fields="%2C".join([arg for arg in args]),
+            access_token=self.access_token
+        )
+        response = requests.get(url)
+        # print("type: {}".format(type(response.json())))
+        return response.json()
 
-    def partial(self, base):
-        client = GraphAPI(self.oauth_token)
-        client.base = client.base + self._segmentize_endpoint(base)
-        return client
+    def get_node_edge_properties(self, metric):
+        """
+        Fields are node properties.
+        The Page node reference indicates which fields
+        you can ask for when reading a Page node.
+        For example, If you wanted to get the about, fan_count, and website fields
 
-    def all(self, endpoint, paramsets, method='GET', body=False, **options):
-        """ A nicer interface for batch requests to the
-        same endpoint but with different parameters, e.g.
-        different date ranges. """
-
-        requests = []
-        for params in paramsets:
-            params = copy.copy(params)
-            params.update(options)
-            segments = self._segmentize_endpoint(endpoint)
-            relative_url = params.get('relative_url')
-            resolved_url = self._resolve_endpoint(segments + [relative_url], params)
-            request = {
-                'method': method,
-                'relative_url': resolved_url,
-            }
-
-            if body:
-                request['body'] = body
-
-            requests.append(request)
-
-        return self.batch(requests)
-
-    def get(self, relative_endpoint=[], *vargs, **kwargs):
-        """ An endpoint can be specified as a string
-         or as a list of path segments. """
-
-        endpoint = self._resolve_endpoint(relative_endpoint)
-        return super(GraphAPI, self).get(endpoint, *vargs, **kwargs)
+        :param metric:
+        :param edge_name:
+        :param args:
+        """
+        # "https://graph.facebook.com/v2.12/1420595431516143_1458058417769844/insights/post_impressions_unique?lifetime&access_token=EAA"
+        base_url = "https://graph.facebook.com"
+        version = "v2.12"
+        url = "{base_url}/{version}/{node_id}/insights/{metric}?lifetime&access_token={access_token}".format(
+            base_url=base_url,
+            version=version,
+            node_id=self.node_id,
+            metric=metric,
+            access_token=self.access_token
+        )
+        response = requests.get(url)
+        # print("type: {}".format(type(response.json())))
+        return response.json()

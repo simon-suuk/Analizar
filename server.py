@@ -4,11 +4,12 @@ import sys
 
 sys.path.append(os.getcwd())
 
-from flask import Flask, render_template, request, jsonify, json, flash, redirect, url_for
-from flask_login import LoginManager, current_user, login_user
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, render_template, request, jsonify, json, flash, redirect, url_for, session
+from flask_login import LoginManager, current_user, login_user, logout_user
 from models.user_model import UserModel
-from models.base_model import DBSingleton
+from models.base_model import DBSingleton, BaseModel
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_security import login_required
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
@@ -165,48 +166,76 @@ def user_sign_up():
         industry = request.form['industry']
         company_size = request.form['company_size']
 
-        hashed_password = generate_password_hash(password)
-        user = UserModel.insert(name=name, email=email, password=hashed_password, company_name=company_name, industry=industry,
-                                company_size=company_size).execute()
-        if user:
-            flash('You have successfully signed up')
-            # return redirect(url_for('analizar_user_signin'))
+        # Email Validation
+        try:
+            query = UserModel.get(UserModel.email == email)
+        except UserModel.DoesNotExist:
+            user = UserModel.insert(name=name, email=email, password_hash=generate_password_hash(password),
+                                    company_name=company_name, industry=industry, company_size=company_size).execute()
+
+            return redirect(url_for('user_sign_in'))
         else:
-            flash('Signup failed, please try again', category='error')
+            flash('please use another email')
 
     return render_template('signup.html')
 
 
 @login_manager.user_loader
 def load_user(id):
-    return UserModel.select().get(int(id))
+    return UserModel.get_by_id(int(id))
 
 
-@app.route('/signin')
+# User Sign In to Analizar
+@app.route('/signin', methods=['GET', 'POST'])
 def user_sign_in():
-    pass
+    if current_user.is_authenticated:
+        return redirect(url_for('user_dashboard'))
+    if request.method == 'POST':
+        try:
+            user = UserModel.get(UserModel.email == request.form['email'])
+            if check_password_hash(user.password_hash, request.form['password']):
+                login_user(user)
+                return redirect(url_for('user_dashboard'))
+            else:
+                flash('Invalid password')
+        except UserModel.DoesNotExist:
+            flash('Account does not exist. Please click on signup to register')
+
     return render_template('signin.html')
 
 
+# Log out user from session
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('user_sign_in'))
+
+
+# Dashboard home page
 @app.route('/dashboard')
+@login_required
 def user_dashboard():
     pass
     return render_template('dashboard.html')
 
 
 @app.route('/dashboard/marketing')
+@login_required
 def user_marketing_obj_dashboard():
     pass
     return render_template('dashboard_marketing.html')
 
 
 @app.route('/dashboard/user_guide')
+@login_required
 def user_guide_dashboard():
     pass
     return render_template('dashboard_userguide.html')
 
 
 @app.route('/dashboard/report')
+@login_required
 def user_report_dashboard():
     pass
     return render_template('dashboard_report.html')

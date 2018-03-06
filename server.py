@@ -9,10 +9,15 @@ from services.authentication import OAuthSignIn
 import services.graph_api as graph
 from models.user_model import UserModel
 from models.base_model import DBSingleton
+from werkzeug.security import generate_password_hash, check_password_hash
+
+# from flask_security import login_required
 
 app = Flask(__name__)
-
 login_manager = LoginManager(app)
+login_manager.init_app(app)
+
+# This will redirect users to the login view whenever they are required to be logged in.
 login_manager.login_view = 'login'
 
 
@@ -40,42 +45,92 @@ def load_user(id):
 
 
 @app.route('/')
-@login_required
 def index():
     return render_template('index.html')
 
 
+# user signup
+@app.route('/signup', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        company_name = request.form['company_name']
+        industry = request.form['industry']
+        company_size = request.form['company_size']
+
+        # Email Validation
+        try:
+            user = UserModel.get(UserModel.email == email)
+        except Exception as ex:
+            user = UserModel.create(
+                name=name,
+                email=email,
+                password_hash=generate_password_hash(password),
+                company_name=company_name,
+                industry=industry,
+                company_size=company_size
+            )
+
+            return redirect(url_for('login'))
+        else:
+            flash('sorry email supplied has already been taken ')
+
+    return render_template('signup.html')
+
+
+# user login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
-
-    if request.method == 'GET':
-        return render_template("login.html")
-
+        return redirect(url_for('user_dashboard'))
     if request.method == 'POST':
-        social_id = request.form['social_id']
-        password = request.form['password']
-
-        user = None
         try:
-            user = UserModel.get(UserModel.social_id == social_id, UserModel.password == password)
+            user = UserModel.get(UserModel.email == request.form['email'])
+            if check_password_hash(user.password_hash, request.form['password']):
+                login_user(user, True)
+                return redirect(url_for('user_dashboard'))
+            else:
+                flash('Authentication failed.')
         except Exception as ex:
-            print(ex.args)
+            flash('Account does not exist. Please click on signup to register')
 
-        if user is None:
-            flash('Authentication failed.')
-            return redirect(url_for('index'))
-
-        login_user(user, True)
-    return redirect(url_for('index'))
+    return render_template('signin.html')
 
 
+# logout user from session
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
+
+
+# dashboard home page
+@app.route('/dashboard')
+@login_required
+def user_dashboard():
+    pass
+    return render_template('dashboard.html')
+
+
+@app.route('/dashboard/marketing')
+@login_required
+def user_marketing_obj_dashboard():
+    return render_template('dashboard_marketing.html')
+
+
+@app.route('/dashboard/user_guide')
+@login_required
+def user_guide_dashboard():
+    return render_template('dashboard_userguide.html')
+
+
+@app.route('/dashboard/report')
+@login_required
+def user_report_dashboard():
+    return render_template('dashboard_report.html')
 
 
 @app.route('/authorize/<provider>')
@@ -92,7 +147,7 @@ def oauth_callback(provider):
         return redirect(url_for('index'))
 
     oauth = OAuthSignIn.get_provider(provider)
-    social_id, username, email, account_data = oauth.callback()
+    social_id, social_username, social_email, account_data = oauth.callback()
     page_id = account_data[2].get("id")
     access_token = account_data[2].get("access_token")
 
@@ -103,18 +158,21 @@ def oauth_callback(provider):
         return redirect(url_for('index'))
 
     try:
-        user = UserModel.get(UserModel.social_id == social_id)
-    except Exception as ex:
-        user = UserModel.create(
+        query = UserModel.update(
             social_id=social_id,
-            username=username,
-            email=email,
-            password="test_sikriit",
-            is_active=True,
+            social_username=social_username,
+            social_email=social_email,
             page_id=page_id,
             access_token=access_token
-        )
-    return user
+        ).where(UserModel.id == "_id")
+
+        if query.execute() < 1:
+            flash('adding account failed.')
+            return redirect(url_for('index'))
+
+    except Exception as ex:
+        print(ex.args)
+    return "added account"
 
 
 @app.route('/set_properties')

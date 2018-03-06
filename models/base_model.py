@@ -1,5 +1,6 @@
 import os
 from peewee import Model
+from flask_login import UserMixin
 from playhouse.pool import PooledPostgresqlDatabase
 
 db_name = os.environ.get("DB_NAME")
@@ -21,6 +22,6 @@ class DBSingleton():
         return cls.db
 
 
-class BaseModel(Model):
+class BaseModel(UserMixin, Model):
     class Meta:
         database = DBSingleton.getInstance()

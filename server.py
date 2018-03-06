@@ -6,7 +6,8 @@ sys.path.append(os.getcwd())
 
 from flask import Flask, render_template, request, jsonify, json, flash, redirect, url_for, session
 from flask_login import LoginManager, current_user, login_user, logout_user
-from models.user_model import UserModel
+from models.user_model import UserModel, ReachKnowledgeBase, EngagementKnowledgeBase, NegativeFeedbackKnowledgeBase,\
+    PageFollowKnowledgeBase, GeneralKnowledgeBase
 from models.base_model import DBSingleton, BaseModel
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_security import login_required
@@ -15,14 +16,21 @@ app = Flask(__name__)
 login_manager = LoginManager(app)
 login_manager.init_app(app)
 
-#This will redirect users to the signin view whenever they are required to be signed in.
+# This will redirect users to the signin view whenever they are required to be signed in.
 login_manager.login_view = 'signin'
 
 
 @app.before_first_request
 def initialize_tables():
     connect_db()
-    if not UserModel.table_exists():
+    if not (UserModel.table_exists() and ReachKnowledgeBase.table_exists() and EngagementKnowledgeBase.table_exists()
+            and NegativeFeedbackKnowledgeBase.table_exists() and PageFollowKnowledgeBase.table_exists()
+            and GeneralKnowledgeBase.table_exists()):
+        GeneralKnowledgeBase.create_table()
+        ReachKnowledgeBase.create_table()
+        EngagementKnowledgeBase.create_table()
+        NegativeFeedbackKnowledgeBase.create_table()
+        PageFollowKnowledgeBase.create_table()
         UserModel.create_table()
     disconnect_db()
 

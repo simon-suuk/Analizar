@@ -6,7 +6,7 @@ sys.path.append(os.getcwd())
 from flask import Flask, render_template, request, jsonify, json, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from services.authentication import OAuthSignIn
-import services.graph as graph
+import services.graph_api as graph
 from models.user_model import UserModel
 from models.base_model import DBSingleton
 
@@ -117,18 +117,93 @@ def oauth_callback(provider):
     return user
 
 
-@app.route('/fetch_page_posts/<edge_name>')
+@app.route('/set_properties')
 @login_required
-def fetch_page_posts(edge_name):
+def set_properties():
+    post_metrics_properties = {}
     page = None
     try:
-        page = graph.Page(current_user.page_id, current_user.access_token)
+        page = graph.PageOrPost(current_user.page_id, current_user.access_token)
+    except Exception as ex:
+        print(ex.args)
+
+    post_metrics_properties["fan_base"] = page.get_node_properties("fan_count")["fan_count"]
+    fan_adds = page.get_node_properties("insights.since(2018-03-06).metric(page_fan_adds)"
+                                        ".fields(title, values)")["insights"]["data"][0]["values"][0]["value"]
+
+    post_metrics_properties["fan_adds"] = fan_adds
+
+    posts_stats = page.get_node_properties("posts.since(2014-06-08).until(2014-06-09).fields(id,shares,likes.summary("
+                                           "true).limit(0),comments.summary(true).limit(0))")["posts"]["data"]
+
+    new_dict = dict((item["id"], item) for item in posts_stats)
+    # print("newdict: {}".format(new_dict))
+    page_post = None
+    for key, val in new_dict.items():
+        page_post = graph.PageOrPost(key, current_user.access_token)
+        try:
+            shares = val["shares"]["count"]
+        except KeyError:
+            shares = 0
+
+        try:
+            likes = val["likes"]["summary"]["total_count"]
+        except KeyError:
+            likes = 0
+
+        try:
+            comments = val["comments"]["summary"]["total_count"]
+        except KeyError:
+            comments = 0
+
+        stats = page_post.get_node_properties(
+            'insights.metric(post_impressions_unique,post_engaged_users,post_consumptions_unique,'
+            'post_negative_feedback_unique).period(lifetime).fields(id,name,values,title)')["insights"]["data"]
+
+        try:
+            lifetime_post_reach = stats[0]["values"][0]["value"]
+        except KeyError:
+            lifetime_post_reach = 0
+
+        try:
+            lifetime_engaged_users = stats[1]["values"][0]["value"]
+        except KeyError:
+            lifetime_engaged_users = 0
+
+        try:
+            clicks = stats[2]["values"][0]["value"]
+        except KeyError:
+            clicks = 0
+
+        try:
+            lifetime_negative_feedback = stats[3]["values"][0]["value"]
+        except KeyError:
+            lifetime_negative_feedback = 0
+
+        post_metrics_properties[key] = {"shares": shares,
+                                        "likes": likes,
+                                        "comments": comments,
+                                        "lifetime_post_reach": lifetime_post_reach,
+                                        "lifetime_engaged_users": lifetime_engaged_users,
+                                        "clicks": clicks,
+                                        "lifetime_negative_feedback": lifetime_negative_feedback}
+
+    # print("post_metrics_properties: {}".format(post_metrics_properties))
+    return jsonify(post_metrics_properties)
+
+
+@app.route('/fetch_page_edge/<edge_name>')
+@login_required
+def fetch_page_edge(edge_name):
+    page = None
+    try:
+        page = graph.PageOrPost(current_user.page_id, current_user.access_token)
         # print("All Post nodes Page: {}".format(page.get_edge("feed")))
 
     except Exception as ex:
         print(ex.args)
         return None
-    return page.get_edge(edge_name)
+    return jsonify(page.get_edge(edge_name))
 
 
 @app.route('/fetch_page_properties/<fields>')
@@ -136,11 +211,11 @@ def fetch_page_posts(edge_name):
 def fetch_page_properties(fields):
     page = None
     try:
-        page = graph.Page(current_user.page_id, current_user.access_token)
+        page = graph.PageOrPost(current_user.page_id, current_user.access_token)
     except Exception as ex:
         print(ex.args)
         return None
-    return page.get_node_properties(fields)
+    return jsonify(page.get_node_properties(fields))
 
 
 @app.route('/users/', methods=['POST'])

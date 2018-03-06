@@ -2,7 +2,7 @@ import json
 import os
 
 from rauth import OAuth1Service, OAuth2Service
-from services.graph_api import GraphAPI
+from services.deprecated_graph import GraphAPI
 from flask import url_for, request, redirect, session
 
 

@@ -14,3 +14,10 @@
 * User registration
 * User login
 * Reading page insights, manage pages
+
+# Version 0.1.2 
+*2018-03-06*
+
+*Features*
+* Generate page and post metrics for reporting and advice
+* Created knowledge_base to fetch expert advice from

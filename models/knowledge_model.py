@@ -1,5 +1,6 @@
+from peewee import TextField, ForeignKeyField
+
 from models.base_model import *
-from peewee import CharField, BooleanField, TextField, DateTimeField, ForeignKeyField
 
 
 class GeneralKnowledgeBase(BaseModel):

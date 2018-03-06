@@ -1,21 +1,21 @@
 import os
 import sys
 
-
 sys.path.append(os.getcwd())
 
-from flask import Flask, render_template, request, jsonify, json, flash, redirect, url_for, session
-from flask_login import LoginManager, current_user, login_user, logout_user
+from flask import Flask, render_template, request, jsonify, json, flash, redirect, url_for
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from models.user_model import UserModel
-from models.base_model import DBSingleton, BaseModel
+from models.base_model import DBSingleton
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_security import login_required
+
+# from flask_security import login_required
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
 login_manager.init_app(app)
 
-#This will redirect users to the signin view whenever they are required to be signed in.
+# This will redirect users to the login view whenever they are required to be logged in.
 login_manager.login_view = 'signin'
 
 
@@ -37,9 +37,98 @@ def disconnect_db(err=None):
     DBSingleton.getInstance().close()
 
 
+@login_manager.user_loader
+def load_user(id):
+    return UserModel.get(UserModel.id == int(id))
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+# user signup
+@app.route('/signup', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        company_name = request.form['company_name']
+        industry = request.form['industry']
+        company_size = request.form['company_size']
+
+        # Email Validation
+        try:
+            user = UserModel.get(UserModel.email == email)
+        except Exception as ex:
+            user = UserModel.create(
+                name=name,
+                email=email,
+                password_hash=generate_password_hash(password),
+                company_name=company_name,
+                industry=industry,
+                company_size=company_size
+            )
+
+            return redirect(url_for('login'))
+        else:
+            flash('sorry email supplied has already been taken ')
+
+    return render_template('signup.html')
+
+
+# user login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('user_dashboard'))
+    if request.method == 'POST':
+        try:
+            user = UserModel.get(UserModel.email == request.form['email'])
+            if check_password_hash(user.password_hash, request.form['password']):
+                login_user(user, True)
+                return redirect(url_for('user_dashboard'))
+            else:
+                flash('Authentication failed.')
+        except Exception as ex:
+            flash('Account does not exist. Please click on signup to register')
+
+    return render_template('signin.html')
+
+
+# logout user from session
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+
+# dashboard home page
+@app.route('/dashboard')
+@login_required
+def user_dashboard():
+    pass
+    return render_template('dashboard.html')
+
+
+@app.route('/dashboard/marketing')
+@login_required
+def user_marketing_obj_dashboard():
+    return render_template('dashboard_marketing.html')
+
+
+@app.route('/dashboard/user_guide')
+@login_required
+def user_guide_dashboard():
+    return render_template('dashboard_userguide.html')
+
+
+@app.route('/dashboard/report')
+@login_required
+def user_report_dashboard():
+    return render_template('dashboard_report.html')
 
 
 @app.route('/users/', methods=['POST'])
@@ -155,90 +244,4 @@ def delete_fact(_id):
                                           'created_on': user_record.timestamp}}})
 
 
-# User sign up on Analizar
-@app.route('/signup', methods=['GET', 'POST'])
-def user_sign_up():
-    if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-        company_name = request.form['company_name']
-        industry = request.form['industry']
-        company_size = request.form['company_size']
-
-        # Email Validation
-        try:
-            query = UserModel.get(UserModel.email == email)
-        except UserModel.DoesNotExist:
-            user = UserModel.insert(name=name, email=email, password_hash=generate_password_hash(password),
-                                    company_name=company_name, industry=industry, company_size=company_size).execute()
-
-            return redirect(url_for('user_sign_in'))
-        else:
-            flash('please use another email')
-
-    return render_template('signup.html')
-
-
-@login_manager.user_loader
-def load_user(id):
-    return UserModel.get_by_id(int(id))
-
-
-# User Sign In to Analizar
-@app.route('/signin', methods=['GET', 'POST'])
-def user_sign_in():
-    if current_user.is_authenticated:
-        return redirect(url_for('user_dashboard'))
-    if request.method == 'POST':
-        try:
-            user = UserModel.get(UserModel.email == request.form['email'])
-            if check_password_hash(user.password_hash, request.form['password']):
-                login_user(user)
-                return redirect(url_for('user_dashboard'))
-            else:
-                flash('Invalid password')
-        except UserModel.DoesNotExist:
-            flash('Account does not exist. Please click on signup to register')
-
-    return render_template('signin.html')
-
-
-# Log out user from session
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('user_sign_in'))
-
-
-# Dashboard home page
-@app.route('/dashboard')
-@login_required
-def user_dashboard():
-    pass
-    return render_template('dashboard.html')
-
-
-@app.route('/dashboard/marketing')
-@login_required
-def user_marketing_obj_dashboard():
-    pass
-    return render_template('dashboard_marketing.html')
-
-
-@app.route('/dashboard/user_guide')
-@login_required
-def user_guide_dashboard():
-    pass
-    return render_template('dashboard_userguide.html')
-
-
-@app.route('/dashboard/report')
-@login_required
-def user_report_dashboard():
-    pass
-    return render_template('dashboard_report.html')
-
-
-app.secret_key = 'b\'Lg\xdfP{\xe0\xa7t\xbb\xe0\x06/'
+app.secret_key = os.environ.get("FLASK_SECRET_KEY")

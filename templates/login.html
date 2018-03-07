@@ -1,19 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Analizar</title>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Analizar - login</title>
+
+	<link rel="stylesheet" href="/static/css/demo.css">
+	<link rel="stylesheet" href="/static/css/form-login.css">
+
 </head>
+
 <body>
-  <h2>Login</h2>
-  <form action="{{ url_for('login') }}" method=post>
-    <dl>
-      <dt>Social ID:
-      <dd><input type=text name=social_id>
-      <dt>Password:
-      <dd><input type=password name=password>
-      <dd><input type=submit value=Login>
-    </dl>
-  </form>
+<header>
+    <h1>Analizar</h1>
+</header>
+
+    <div class="main-content">
+
+        <!-- You only need this form and the form-login.css -->
+        <form class="form-login" method="post" action="{{ url_for('login') }}">
+            <div class="form-log-in-with-email">
+
+                <div class="form-white-background">
+
+                    <div class="form-title-row">
+                        <h1>Log in</h1>
+                    </div>
+
+                    <div class="form-row">
+                        <label>
+                            <span>Email</span>
+                            <input type="email" name="email">
+                        </label>
+                    </div>
+
+                    <div class="form-row">
+                        <label>
+                            <span>Password</span>
+                            <input type="password" name="password">
+                        </label>
+                    </div>
+
+                    <div class="form-row">
+                        <button type="submit">Log in</button>
+                    </div>
+
+                </div>
+
+                <a href="#" class="form-forgotten-password">Forgotten password </a>
+                <a href="{{ url_for('signup') }}" class="form-create-an-account">Create an account </a>
+
+            </div>
+        </form>
+
+    </div>
+
 </body>
+
 </html>

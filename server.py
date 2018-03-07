@@ -44,14 +44,9 @@ def load_user(id):
     return UserModel.get(UserModel.id == int(id))
 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
 # user signup
 @app.route('/signup', methods=['GET', 'POST'])
-def register():
+def signup():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -94,9 +89,9 @@ def login():
             else:
                 flash('Authentication failed.')
         except Exception as ex:
-            flash('Account does not exist. Please click on signup to register')
+            flash('Account does not exist. Please click on signup to signup')
 
-    return render_template('signin.html')
+    return render_template('login.html')
 
 
 # logout user from session
@@ -108,10 +103,10 @@ def logout():
 
 
 # dashboard home page
+@app.route('/')
 @app.route('/dashboard')
 @login_required
 def user_dashboard():
-    pass
     return render_template('dashboard.html')
 
 
@@ -135,16 +130,16 @@ def user_report_dashboard():
 
 @app.route('/authorize/<provider>')
 def oauth_authorize(provider):
-    if not current_user.is_anonymous:
-        return redirect(url_for('index'))
+    if current_user.page_id is not None:
+        return redirect(url_for('user_dashboard'))
     oauth = OAuthSignIn.get_provider(provider)
     return oauth.authorize()
 
 
 @app.route('/callback/<provider>')
 def oauth_callback(provider):
-    if not current_user.is_anonymous:
-        return redirect(url_for('index'))
+    if current_user.page_id is not None:
+        return redirect(url_for('user_dashboard'))
 
     oauth = OAuthSignIn.get_provider(provider)
     social_id, social_username, social_email, account_data = oauth.callback()
@@ -155,7 +150,7 @@ def oauth_callback(provider):
 
     if social_id is None:
         flash('Authentication failed.')
-        return redirect(url_for('index'))
+        return redirect(url_for('user_dashboard'))
 
     try:
         query = UserModel.update(
@@ -164,15 +159,15 @@ def oauth_callback(provider):
             social_email=social_email,
             page_id=page_id,
             access_token=access_token
-        ).where(UserModel.id == "_id")
+        ).where(UserModel.email == current_user.email)
 
         if query.execute() < 1:
             flash('adding account failed.')
-            return redirect(url_for('index'))
+            return redirect(url_for('user_dashboard'))
 
     except Exception as ex:
         print(ex.args)
-    return "added account"
+    return redirect(url_for('user_dashboard'))
 
 
 @app.route('/set_properties')

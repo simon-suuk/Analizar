@@ -14,20 +14,20 @@
 
 
     <!-- Bootstrap core CSS     -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static/css', filename='bootstrap.min.css') }}"/>
     <!-- Animation library for notifications   -->
-    <link href="/static/css/animate.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{ url_for('static/css', filename='animate.min.css') }}"/>
     <!--  Light Bootstrap Table core CSS    -->
-    <link href="/static/css/dashboard.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{ url_for('static/css', filename='dashboard.css') }}"/>
     <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="/static/css/demo.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static/css', filename='demo.css') }}"/>
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
-    <link href="/static/css/pe-icon-7-stroke.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static/css', filename='pe-icon-7-stroke.css') }}"/>
 
-	<link rel="stylesheet" href="/static/css/form-login.css">
-    <link rel="stylesheet" href="/static/css/form-basic.css">
+    <link rel="stylesheet" href="{{ url_for('static/css', filename='form-login.css') }}"/>
+	<link rel="stylesheet" href="{{ url_for('static/css', filename='form-basic.css') }}"/>
 
 </head>
 <body>

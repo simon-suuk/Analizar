@@ -33,3 +33,8 @@ __pycache__
 .env
 .idea
 node_modules/
+include/
+lib/
+local/
+share/python-wheels/
+index.js

@@ -1,67 +1,67 @@
-@import url('http://fonts.googleapis.com/css?family=Open+Sans:400,700');
+@media (min-width: 992px){
+    .typo-line{
+        padding-left: 140px;
+        margin-bottom: 40px;
+        position: relative;
+    }
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    .typo-line .category{
+        transform: translateY(-50%);
+        top: 50%;
+        left: 0px;
+        position: absolute;
+    }
 }
 
-html{
-	background-color: #efefef;
+.all-icons [class*="pe-"]{
+    font-size: 40px;
 }
-
-body{
-	font:14px/1.5 Arial, Helvetica, sans-serif;
-	margin:0;
+.all-icons input{
+    border: 0;
 }
-
-
-header{
-    box-sizing: border-box;
-	text-align: center;
+.all-icons .font-icon-detail{
+    text-align: center;
+    padding: 45px 0px 30px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    margin: 15px 0;
+}
+.all-icons .font-icon-detail input{
+    margin: 25px auto 0;
     width: 100%;
-    padding: 25px 40px;
-    background-color: #6550BA;
-    overflow: hidden;
-    margin-bottom: 75px;s
+    text-align: center;
+    display: block;
+    color: #aaa;
+    font-size: 13px;
 }
 
-
-header h1{
-    float: left;
-	font: normal 24px/1.5 'Open Sans', sans-serif;
-	color: #fff;
+#map{
+    position:relative;
+    width:100%;
+    height: calc(100% - 60px);
 }
 
-header a{
-    color:#fff;
-    float: right;
-    text-decoration: none;
-    display: inline-block;
-    padding: 13px 50px;
-    border-radius: 3px;
-    font: bold 14px/1 'Open Sans', sans-serif;
-    text-transform: uppercase;
-    background-color:#F05283;
-
+.places-buttons .btn{
+    margin-bottom: 30px
+}
+.sidebar .nav > li.active-pro{
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+}
+.sidebar .nav > li.active-pro a{
+    background: rgba(255, 255, 255, 0.14);
+    opacity: 1;
+    color: #FFFFFF;
 }
 
+.table-upgrade td:nth-child(2),
+.table-upgrade td:nth-child(3){
+    text-align: center;
+}
 
-@media (max-width: 1000px) {
-
-
-    header h1{
-        float: none;
+@media all and (max-width: 991px)  {
+    .sidebar .nav > li.active-pro{
+        position: initial;
     }
-
-    header a{
-        margin-top: 25px;
-        float: none;
-    }
-
 }
-
-.main-content{
-    margin-bottom: 75px;
-}
-

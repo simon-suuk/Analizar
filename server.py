@@ -3,11 +3,11 @@ import sys
 
 sys.path.append(os.getcwd())
 
-from models.user_model import UserModel, ReachKnowledgeBase, EngagementKnowledgeBase, NegativeFeedbackKnowledgeBase,\
-    PageFollowKnowledgeBase, GeneralKnowledgeBase
-
-from flask import Flask, render_template, request, jsonify, json, flash, redirect, url_for
-from flask_login import LoginManager, current_user, login_user, logout_user, login_required
+from flask import Flask, render_template, request, jsonify, json, redirect, url_for, flash
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
+from services.authentication import OAuthSignIn
+import services.graph_api as graph
+from models.user_model import UserModel
 from models.base_model import DBSingleton
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -17,21 +17,14 @@ app = Flask(__name__)
 login_manager = LoginManager(app)
 login_manager.init_app(app)
 
-# This will redirect users to the signin view whenever they are required to be signed in.
-login_manager.login_view = 'signin'
+# This will redirect users to the login view whenever they are required to be logged in.
+login_manager.login_view = 'login'
 
 
 @app.before_first_request
 def initialize_tables():
     connect_db()
-    if not (UserModel.table_exists() and ReachKnowledgeBase.table_exists() and EngagementKnowledgeBase.table_exists()
-            and NegativeFeedbackKnowledgeBase.table_exists() and PageFollowKnowledgeBase.table_exists()
-            and GeneralKnowledgeBase.table_exists()):
-        GeneralKnowledgeBase.create_table()
-        ReachKnowledgeBase.create_table()
-        EngagementKnowledgeBase.create_table()
-        NegativeFeedbackKnowledgeBase.create_table()
-        PageFollowKnowledgeBase.create_table()
+    if not UserModel.table_exists():
         UserModel.create_table()
     disconnect_db()
 
@@ -51,14 +44,9 @@ def load_user(id):
     return UserModel.get(UserModel.id == int(id))
 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
 # user signup
 @app.route('/signup', methods=['GET', 'POST'])
-def register():
+def signup():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -101,9 +89,9 @@ def login():
             else:
                 flash('Authentication failed.')
         except Exception as ex:
-            flash('Account does not exist. Please click on signup to register')
+            flash('Account does not exist. Please click on signup to signup')
 
-    return render_template('signin.html')
+    return render_template('login.html')
 
 
 # logout user from session
@@ -115,10 +103,10 @@ def logout():
 
 
 # dashboard home page
+@app.route('/')
 @app.route('/dashboard')
 @login_required
 def user_dashboard():
-    pass
     return render_template('dashboard.html')
 
 
@@ -138,6 +126,149 @@ def user_guide_dashboard():
 @login_required
 def user_report_dashboard():
     return render_template('dashboard_report.html')
+
+
+@app.route('/authorize/<provider>')
+def oauth_authorize(provider):
+    if current_user.page_id is not None:
+        return redirect(url_for('user_dashboard'))
+    oauth = OAuthSignIn.get_provider(provider)
+    return oauth.authorize()
+
+
+@app.route('/callback/<provider>')
+def oauth_callback(provider):
+    if current_user.page_id is not None:
+        return redirect(url_for('user_dashboard'))
+
+    oauth = OAuthSignIn.get_provider(provider)
+    social_id, social_username, social_email, account_data = oauth.callback()
+    page_id = account_data[2].get("id")
+    access_token = account_data[2].get("access_token")
+
+    # print('My Account Page_id: {} My Account Access_token:{}'.format(page_id, access_token))
+
+    if social_id is None:
+        flash('Authentication failed.')
+        return redirect(url_for('user_dashboard'))
+
+    try:
+        query = UserModel.update(
+            social_id=social_id,
+            social_username=social_username,
+            social_email=social_email,
+            page_id=page_id,
+            access_token=access_token
+        ).where(UserModel.email == current_user.email)
+
+        if query.execute() < 1:
+            flash('adding account failed.')
+            return redirect(url_for('user_dashboard'))
+
+    except Exception as ex:
+        print(ex.args)
+    return redirect(url_for('user_dashboard'))
+
+
+@app.route('/set_properties')
+@login_required
+def set_properties():
+    post_metrics_properties = {}
+    page = None
+    try:
+        page = graph.PageOrPost(current_user.page_id, current_user.access_token)
+    except Exception as ex:
+        print(ex.args)
+
+    post_metrics_properties["fan_base"] = page.get_node_properties("fan_count")["fan_count"]
+    fan_adds = page.get_node_properties("insights.since(2018-03-06).metric(page_fan_adds)"
+                                        ".fields(title, values)")["insights"]["data"][0]["values"][0]["value"]
+
+    post_metrics_properties["fan_adds"] = fan_adds
+
+    posts_stats = page.get_node_properties("posts.since(2014-06-08).until(2014-06-09).fields(id,shares,likes.summary("
+                                           "true).limit(0),comments.summary(true).limit(0))")["posts"]["data"]
+
+    new_dict = dict((item["id"], item) for item in posts_stats)
+    # print("newdict: {}".format(new_dict))
+    page_post = None
+    for key, val in new_dict.items():
+        page_post = graph.PageOrPost(key, current_user.access_token)
+        try:
+            shares = val["shares"]["count"]
+        except KeyError:
+            shares = 0
+
+        try:
+            likes = val["likes"]["summary"]["total_count"]
+        except KeyError:
+            likes = 0
+
+        try:
+            comments = val["comments"]["summary"]["total_count"]
+        except KeyError:
+            comments = 0
+
+        stats = page_post.get_node_properties(
+            'insights.metric(post_impressions_unique,post_engaged_users,post_consumptions_unique,'
+            'post_negative_feedback_unique).period(lifetime).fields(id,name,values,title)')["insights"]["data"]
+
+        try:
+            lifetime_post_reach = stats[0]["values"][0]["value"]
+        except KeyError:
+            lifetime_post_reach = 0
+
+        try:
+            lifetime_engaged_users = stats[1]["values"][0]["value"]
+        except KeyError:
+            lifetime_engaged_users = 0
+
+        try:
+            clicks = stats[2]["values"][0]["value"]
+        except KeyError:
+            clicks = 0
+
+        try:
+            lifetime_negative_feedback = stats[3]["values"][0]["value"]
+        except KeyError:
+            lifetime_negative_feedback = 0
+
+        post_metrics_properties[key] = {"shares": shares,
+                                        "likes": likes,
+                                        "comments": comments,
+                                        "lifetime_post_reach": lifetime_post_reach,
+                                        "lifetime_engaged_users": lifetime_engaged_users,
+                                        "clicks": clicks,
+                                        "lifetime_negative_feedback": lifetime_negative_feedback}
+
+    # print("post_metrics_properties: {}".format(post_metrics_properties))
+    return jsonify(post_metrics_properties)
+
+
+@app.route('/fetch_page_edge/<edge_name>')
+@login_required
+def fetch_page_edge(edge_name):
+    page = None
+    try:
+        page = graph.PageOrPost(current_user.page_id, current_user.access_token)
+        # print("All Post nodes Page: {}".format(page.get_edge("feed")))
+
+    except Exception as ex:
+        print(ex.args)
+        return None
+    return jsonify(page.get_edge(edge_name))
+
+
+@app.route('/fetch_page_properties/<fields>')
+@login_required
+def fetch_page_properties(fields):
+    page = None
+    try:
+        page = graph.PageOrPost(current_user.page_id, current_user.access_token)
+    except Exception as ex:
+        print(ex.args)
+        return None
+    return jsonify(page.get_node_properties(fields))
 
 
 @app.route('/users/', methods=['POST'])

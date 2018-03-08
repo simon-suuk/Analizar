@@ -4,7 +4,7 @@ from flask_login import UserMixin
 from datetime import datetime
 
 
-class UserModel(UserMixin, BaseModel):
+class UserModel(BaseModel):
     name = TextField(45)
     email = TextField(45)
     password_hash = TextField(255)

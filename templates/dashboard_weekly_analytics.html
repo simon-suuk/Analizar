@@ -2,8 +2,9 @@
 {% block body %}
 
     <div class="wrapper">
-        <div class="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
+        <div class="sidebar" data-color="purple" data-image="static/img/sidebar-5.jpg">
 
+            <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
 
 
             <div class="sidebar-wrapper">
@@ -14,22 +15,23 @@
                 </div>
 
                 <ul class="nav">
-                    <li class="active">
-                        <a href="accounts.html">
+
+                    <li>
+                        <a href="/dashboard/">
                             <i class="pe-7s-graph"></i>
                             <p>Add Accounts</p>
                         </a>
                     </li>
                     <li>
-                        <a href="post.html">
+                        <a href="/dashboard/post">
                             <i class="pe-7s-graph"></i>
                             <p>Posts</p>
                         </a>
                     </li>
                     <li>
-                            <a href="analytics.html">
-                                <i class="pe-7s-user"></i><p>Analytics</p>
-                            </a>
+                        <a href="/dashboard/post_analytics">
+                            <i class="pe-7s-user"></i><p>Analytics</p>
+                        </a>
                     </li>
                     <li>
                         <a href="#">
@@ -48,8 +50,6 @@
             </div>
         </div>
 
-    <!-- Dashboard Codes Itself -->
-
         <div class="main-panel">
             <nav class="navbar navbar-default navbar-fixed">
                 <div class="container-fluid">
@@ -60,7 +60,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">Dashboard</a>
+                        <a class="navbar-brand" href="#">Analytics</a>
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-left">
@@ -72,7 +72,7 @@
                             </li>
 
                             <li>
-                               <a href="">
+                                <a href="">
                                     <i class="fa fa-search"></i>
                                     <p class="hidden-lg hidden-md">Search</p>
                                 </a>
@@ -81,8 +81,8 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                               <a href="">
-                                   <p>Account</p>
+                                <a href="">
+                                    <p>Account</p>
                                 </a>
                             </li>
 
@@ -91,7 +91,7 @@
                                     <p>Log out</p>
                                 </a>
                             </li>
-                            <li class="separator hidden-lg"></li>
+                            <li class="separator hidden-lg hidden-md"></li>
                         </ul>
                     </div>
                 </div>
@@ -101,65 +101,46 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-12">
+
+                        <!-- First ROw -->
+
+
+                        <div class="col-md-6">
                             <div class="card">
-
-                                <div class="header">
-                                    <h4 class="title"><b>Add Your Social Media Accounts: </b><small>We Only Support Facebook For Now</small></h4>
-                                </div>
-
-                                <div class="content">
-
-                                            <br>
-                                            <br>
-
-
-                                    <div class="col-sm-4 mt-2">
-                                        <div class="card-block">
-                                            <a href="#"><img src="assets/img/facebook.svg" width="100px" height="100px"></a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4 mt-2">
-                                        <div class="card-block">
-                                            <a href=""><img src="assets/img/twitter.svg" width="100px" height="100px"></a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4 mt-2">
-                                        <div class="card-block">
-                                            <a href=""><img src="assets/img/instagram.svg" width="100px" height="100px"></a>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="footer">
-                                        <div class="legend"></div>
-
-                                        <hr>
-
-                                        <div class="stats"></div>
-                                    </div>
-
-                                </div>
-
+                                <br>
+                                <br>
+                                <a  href="/dashboard/weekly">
+                                    <img src="/static/img/analy.svg" width="200px" height="200px"><br>
+                                    <p class="dailyreport">Analytic Report</p>
+                                </a>
+                                <br>
+                                <br>
                             </div>
                         </div>
 
-                    </div>
+                        <!-- End Of First ROw -->
 
 
+                        <!-- Second Card -->
+
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <br>
+                                <br>
+                                <a  href="/dashboard/advice_1">
+                                    <img src="/static/img/presentation.svg" width="200px" height="200px"><br>
+                                    <p class="dailyreport">Advisory Report</p>
+                                </a>
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+                    </div>        <!-- End of Second Card -->
                 </div>
+
             </div>
-
-
-
-            <footer class="footer">
-                <div class="container-fluid">
-
-                </div>
-            </footer>
-
         </div>
     </div>
+
 {% endblock %}

@@ -1,24 +1,23 @@
 {% extends 'base.html' %}
-
 {% block body %}
 
-<header>
-    <h1>KontentHub</h1>
-</header>
+    <header>
+        <h1>KontentHub</h1>
+    </header>
 
     <div class="main-content">
         <!-- You only need this form and the form-login.css -->
 
         <form class="form-login" method="post" action="/login">
             {% with messages = get_flashed_messages(with_categories=true) %}
-                  <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
-              {% if messages %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
                     {% for category, message in messages %}
                         <div class="alert alert-{{ category }} alert-dismissible" role="alert">
                             {{ message }}
                         </div>
                     {% endfor %}
-              {% endif %}
+                {% endif %}
             {% endwith %}
 
             <div class="form-log-in-with-email">

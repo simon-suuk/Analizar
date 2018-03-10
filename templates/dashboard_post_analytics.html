@@ -2,9 +2,9 @@
 {% block body %}
 
     <div class="wrapper">
-        <div class="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
+        <div class="sidebar" data-color="purple" data-image="static/img/sidebar-5.jpg">
 
-        <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
+            <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
 
 
             <div class="sidebar-wrapper">
@@ -17,21 +17,21 @@
                 <ul class="nav">
 
                     <li>
-                        <a href="accounts.html">
+                        <a href="/dashboard">
                             <i class="pe-7s-graph"></i>
                             <p>Add Accounts</p>
                         </a>
                     </li>
                     <li>
-                        <a href="post.html">
+                        <a href="/dashboard/post">
                             <i class="pe-7s-graph"></i>
                             <p>Posts</p>
                         </a>
                     </li>
                     <li>
-                            <a href="analytics.html">
-                                <i class="pe-7s-user"></i><p>Analytics</p>
-                            </a>
+                        <a href="/dashboard/post_analytics">
+                            <i class="pe-7s-user"></i><p>Analytics</p>
+                        </a>
                     </li>
                     <li>
                         <a href="#">
@@ -72,7 +72,7 @@
                             </li>
 
                             <li>
-                               <a href="">
+                                <a href="">
                                     <i class="fa fa-search"></i>
                                     <p class="hidden-lg hidden-md">Search</p>
                                 </a>
@@ -81,8 +81,8 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                               <a href="">
-                                   <p>Account</p>
+                                <a href="">
+                                    <p>Account</p>
                                 </a>
                             </li>
 
@@ -98,48 +98,48 @@
             </nav>
 
 
-                <div class="content">
-                    <div class="container-fluid">
-                        <div class="row">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
 
-                            <!-- First ROw -->
-
-
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <br>
-                                        <br>
-                                            <a  href="dailyreport.html">
-                                                <img src="assets/img/report.svg" width="200px" height="200px"><br>
-                                                <p class="dailyreport">Daily Report</p>
-                                            </a>
-                                        <br>
-                                        <br>
-                                    </div>
-                                </div>
-
-                                <!-- End Of First ROw -->
+                        <!-- First ROw -->
 
 
-                                <!-- Second Card -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <br>
+                                <br>
+                                <a  href="/dashboard/daily_report">
+                                    <img src="/static/img/report.svg" width="200px" height="200px"><br>
+                                    <p class="dailyreport">Daily Report</p>
+                                </a>
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+
+                        <!-- End Of First ROw -->
 
 
-                                <div class="col-md-6">
-                                        <div class="card">
-                                                <br>
-                                                <br>
-                                                    <a  href="weeklyanalytics.html">
-                                                        <img src="assets/img/report (1).svg" width="200px" height="200px"><br>
-                                                        <p class="dailyreport">Weekly Report</p>
-                                                    </a>
-                                                <br>
-                                                <br>
-                                        </div>
-                                </div>
-                        </div>        <!-- End of Second Card -->
-                    </div>
+                        <!-- Second Card -->
 
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <br>
+                                <br>
+                                <a  href="/dashboard/weekly_analytics">
+                                    <img src="/static/img/report (1).svg" width="200px" height="200px"><br>
+                                    <p class="dailyreport">Weekly Report</p>
+                                </a>
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+                    </div>        <!-- End of Second Card -->
                 </div>
+
+            </div>
         </div>
     </div>
 

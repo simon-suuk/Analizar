@@ -1,89 +1,90 @@
 {% extends 'base.html' %}
 {% block body %}
-	<header>
-		<h1>Analizar</h1>
+
+    <header>
+        <h1>Analizar</h1>
     </header>
     <div class="main-content">
 
-            <form class="form-basic" method="post" action="/signup">
-                 {% with messages = get_flashed_messages(with_categories=true) %}
-                  <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
-                  {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                  {% endif %}
-                {% endwith %}
+        <form class="form-basic" method="post" action="/signup">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
-                <div class="form-title-row">
-                    <h1>Getting Started with Analizar</h1>
-                </div>
+            <div class="form-title-row">
+                <h1>Getting Started with Analizar</h1>
+            </div>
 
-                <div class="form-row">
-                    <label>
-                        <span>Full Name:</span>
-                        <input type="text" name="name">
-                    </label>
-                </div>
+            <div class="form-row">
+                <label>
+                    <span>Full Name:</span>
+                    <input type="text" name="name">
+                </label>
+            </div>
 
-                <div class="form-row">
-                    <label>
-                        <span>Email-Address:</span>
-                        <input type="email" name="email">
-                    </label>
-                </div>
-
-
-                <div class="form-row">
-                    <label>
-                        <span>Password:</span>
-                        <input type="password" name="password">
-                    </label>
-                </div>
-
-                <div class="form-row">
-                    <label>
-                        <span>Company Name:</span>
-                        <input type="text" name="company_name">
-                    </label>
-                </div>
+            <div class="form-row">
+                <label>
+                    <span>Email-Address:</span>
+                    <input type="email" name="email">
+                </label>
+            </div>
 
 
-                <div class="form-row">
-                    <label>
-                        <span>Industry</span>
-                        <select name="industry">
-                            <option>Digital Agency</option>
-                            <option>Marketing</option>
-                            <option>Advertising</option>
-                            <option>Brands</option>
-                        </select>
-                    </label>
-                </div>
+            <div class="form-row">
+                <label>
+                    <span>Password:</span>
+                    <input type="password" name="password">
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>Company Name:</span>
+                    <input type="text" name="company_name">
+                </label>
+            </div>
 
 
-                <div class="form-row">
-                    <label>
-                        <span>Company Size</span>
-                        <select name="company_size">
-                            <option>1-20</option>
-                            <option>21-40</option>
-                            <option>41-60</option>
-                            <option>61-100</option>
-                        </select>
-                    </label>
-                </div>
+            <div class="form-row">
+                <label>
+                    <span>Industry</span>
+                    <select name="industry">
+                        <option>Digital Agency</option>
+                        <option>Marketing</option>
+                        <option>Advertising</option>
+                        <option>Brands</option>
+                    </select>
+                </label>
+            </div>
 
 
-                <div class="form-row">
-                    <button type="submit">Get Started</button>
-                </div>
+            <div class="form-row">
+                <label>
+                    <span>Company Size</span>
+                    <select name="company_size">
+                        <option>1-20</option>
+                        <option>21-40</option>
+                        <option>41-60</option>
+                        <option>61-100</option>
+                    </select>
+                </label>
+            </div>
 
-                <a href="/signin" class="form-create-an-account">Already Have An Account? Sign In Here </a>
 
-            </form>
+            <div class="form-row">
+                <button type="submit">Get Started</button>
+            </div>
+
+            <a href="/signin" class="form-create-an-account">Already Have An Account? Sign In Here </a>
+
+        </form>
 
     </div>
 

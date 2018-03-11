@@ -13,6 +13,9 @@ class PostMetricsEngine:
     def get_total_fan_base(self):
         return self.total_fan_base
 
+    def get_total_page_fan_adds(self):
+        return self.total_page_fan_adds
+
     def get_total_post_reach(self):
         return self.total_post_reach
 

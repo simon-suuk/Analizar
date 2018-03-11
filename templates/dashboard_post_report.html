@@ -1,0 +1,377 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="wrapper">
+        <div class="sidebar" data-color="purple" data-image="{{ url_for('static', filename='img/sidebar-5.jpg') }}">
+
+            <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
+
+
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a class="simple-text">
+                        Analizar
+                    </a>
+                </div>
+
+                <ul class="nav">
+                    <li class="active">
+                        <a href="{{ url_for('dashboard_add_account') }}">
+                            <i class="pe-7s-graph"></i>
+                            <p>Add Accounts</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dashboard_post_list') }}">
+                            <i class="pe-7s-graph"></i>
+                            <p>Posts</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dashboard_post_analytics') }}">
+                            <i class="pe-7s-user"></i>
+                            <p>Analytics</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="pe-7s-note2"></i>
+                            <p>Settings</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="pe-7s-note2"></i>
+                            <p>Integrations</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <nav class="navbar navbar-default navbar-fixed">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                data-target="#navigation-example-2">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Post Analysis</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>
+                                <a href="">
+                                    <i class="fa fa-search"></i>
+                                    <p class="hidden-lg hidden-md">Search</p>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="">
+                                    <p>Account</p>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ url_for('logout') }}">
+                                    <p>Log out</p>
+                                </a>
+                            </li>
+                            <li class="separator hidden-lg hidden-md"></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="content">
+                <div class="container-fluid">
+
+                    <div class="row">
+
+                        <!-- First ROw -->
+
+                        <div class="col-md-2">
+                            <div class="card">
+                                <div class="header">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <bold>Likes</bold>
+                                    <br>
+                                    <br>
+                                    <h1 class="title5">1,506</h1>
+                                    <br>
+                                    <hr>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="card">
+                                <div class="header">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <bold>Comments</bold>
+                                    <br>
+                                    <br>
+                                    <h1 class="title5">1,506</h1>
+                                    <br>
+                                    <hr>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="card">
+                                <div class="header">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <bold>Shares</bold>
+                                    <br>
+                                    <br>
+                                    <h1 class="title5">1,506</h1>
+                                    <br>
+                                    <hr>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="card">
+                                <div class="header">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <bold>Likes</bold>
+                                    <br>
+                                    <br>
+                                    <h1 class="title5">1,506</h1>
+                                    <br>
+                                    <hr>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="card">
+                                <div class="header">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <bold>Comments</bold>
+                                    <br>
+                                    <br>
+                                    <h1 class="title5">1,506</h1>
+                                    <br>
+                                    <hr>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="card">
+                                <div class="header">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <bold>Shares</bold>
+                                    <br>
+                                    <br>
+                                    <h1 class="title5">1,506</h1>
+                                    <br>
+                                    <hr>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- End of First Row -->
+
+                    <h5>Here's what you still do about the Post and How It Could Boost Your Current Metrics:</h5>
+
+                    <!-- Second ROw -->
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="header">
+                                    <ul>
+                                        <li> Add An Hashtag such as #MakeUp #Accra <select>
+                                            <option value="zero">TRY</option>
+                                            <option value="ten">IGNORE</option>
+                                        </select></li>
+                                        <br>
+                                        <li> Start A Conversation With People That Liked the post <select>
+                                            <option value="zero">TRY</option>
+                                            <option value="ten">IGNORE</option>
+                                        </select></li>
+                                        <br>
+                                        <li> Place A Call To Action Button at The End of Your Caption <select>
+                                            <option value="zero">TRY</option>
+                                            <option value="ten">IGNORE</option>
+                                        </select></li>
+                                        <br>
+                                        <li> Start A Conversation With People That Liked the post <select>
+                                            <option value="zero">TRY</option>
+                                            <option value="ten">IGNORE</option>
+                                        </select></li>
+                                    </ul>
+
+                                    <hr>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <canvas id="myChart2" width="100" height="50"></canvas>
+                                <h5 class='text-center'>This shows the engagement level for each content type, you
+                                    should
+                                    post more of the contents with a larger size</h5>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <script>
+
+                        let myChart2 = document.getElementById('myChart2').getContext('2d');
+
+
+                        // Global Options
+                        Chart.defaults.global.defaultFontFamily = 'Lato';
+                        Chart.defaults.global.defaultFontSize = 18;
+                        Chart.defaults.global.defaultFontColor = '#777';
+
+
+                        let engagementContentChart = new Chart(myChart2, {
+                            type: 'pie', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+                            data: {
+                                labels: ['Picture', 'Video', 'Text', 'Link', 'Gif'],
+                                datasets: [{
+                                    data: [
+                                        20,
+                                        10,
+                                        5,
+                                        3,
+                                        7
+                                    ],
+                                    //backgroundColor:'green',
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.6)',
+                                        'rgba(54, 162, 235, 0.6)',
+                                        'rgba(255, 206, 86, 0.6)',
+                                        'rgba(75, 192, 192, 0.6)',
+                                        'rgba(153, 102, 255, 0.6)',
+                                        // 'rgba(255, 159, 64, 0.6)',
+                                        // 'rgba(255, 99, 132, 0.6)'
+                                    ],
+                                    borderWidth: 1,
+                                    borderColor: '#777',
+                                    hoverBorderWidth: 3,
+                                    hoverBorderColor: '#000'
+                                }]
+                            },
+                            options: {
+                                title: {
+                                    display: true,
+                                    text: 'Engagement Level per Content Type',
+                                    fontSize: 25
+                                },
+                                legend: {
+                                    display: true,
+                                    position: 'right',
+                                    labels: {
+                                        fontColor: '#000'
+                                    }
+                                },
+                                layout: {
+                                    padding: {
+                                        left: 50,
+                                        right: 0,
+                                        bottom: 0,
+                                        top: 0
+                                    }
+                                },
+                                tooltips: {
+                                    enabled: true
+                                }
+                            }
+                        });
+                    </script>
+
+                    <!-- End of Javascript Graphs -->
+
+                    <!-- End of Second ROw -->
+
+                    <h5>We Know This Because From Historical Data; Example posts to draw inspiration from</h5>
+                    <!-- Third ROw -->
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="header">
+                                    <ul>
+                                        <li> Add An Hashtag such as #MakeUp #Accra</li>
+                                        <br>
+                                        <li> Add An Hashtag such as #MakeUp #Accra</li>
+                                        <br>
+                                        <li> Add An Hashtag such as #MakeUp #Accra</li>
+                                        <br>
+                                        <li> Add An Hashtag such as #MakeUp #Accra</li>
+                                    </ul>
+
+                                    <hr>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="header">
+                                    <ul>
+                                        <li> Add An Hashtag such as #MakeUp #Accra</li>
+                                        <br>
+                                        <li> Add An Hashtag such as #MakeUp #Accra</li>
+                                        <br>
+                                        <li> Add An Hashtag such as #MakeUp #Accra</li>
+                                        <br>
+                                        <li> Add An Hashtag such as #MakeUp #Accra</li>
+                                    </ul>
+
+                                    <hr>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End of Third Row -->
+
+
+        </div>
+        <footer class="footer">
+            <div class="container-fluid">
+            </div>
+        </footer>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+

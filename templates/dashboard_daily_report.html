@@ -1,0 +1,452 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="wrapper">
+        <div class="sidebar" data-color="purple" data-image="{{ url_for('static', filename='img/sidebar-5.jpg') }}">
+
+            <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
+
+
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a class="simple-text">
+                        Analizar
+                    </a>
+                </div>
+
+                <ul class="nav">
+                    <li class="active">
+                        <a href="{{ url_for('dashboard_add_account') }}">
+                            <i class="pe-7s-graph"></i>
+                            <p>Add Accounts</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dashboard_post_list') }}">
+                            <i class="pe-7s-graph"></i>
+                            <p>Posts</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dashboard_post_analytics') }}">
+                            <i class="pe-7s-user"></i>
+                            <p>Analytics</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="pe-7s-note2"></i>
+                            <p>Settings</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="pe-7s-note2"></i>
+                            <p>Integrations</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <nav class="navbar navbar-default navbar-fixed">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                data-target="#navigation-example-2">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Daily Posts Report</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-dashboard"></i>
+                                    <p class="hidden-lg hidden-md">Dashboard</p>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="">
+                                    <i class="fa fa-search"></i>
+                                    <p class="hidden-lg hidden-md">Search</p>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="">
+                                    <p>Account</p>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ url_for('logout') }}">
+                                    <p>Log out</p>
+                                </a>
+                            </li>
+                            <li class="separator hidden-lg hidden-md"></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <!-- Table -->
+
+
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="header text-center">
+                                    <h4 class="title"><strong>Here's How All Your Posts Did Today</strong></h4>   <br>
+                                    <!-- DatePicker -->
+                                    <label for="dateofbirth">Date: <input type="date" name="dateofbirth"
+                                                                          id="dateofbirth"></label>
+                                </div>
+
+                                <!--
+                                                            <div class="content table-responsive table-full-width table-upgrade">
+                                                                <table class="table">
+                                                                    <thead>
+                                                                        <th>Posts</th>
+                                                                        <th class="text-center">Reach</th>
+                                                                        <th class="text-center">Engagements</th>
+                                                                        <th class="text-center">Negative Feedback</th>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td> Staying Alive In Face of Competition.</td>
+                                                                            <td class="text-center">16</td>
+                                                                            <td class="text-center">5</td>
+                                                                            <td class="text-center">10</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> Staying Alive In Face of Competition.</td>
+                                                                            <td class="text-center">16</td>
+                                                                            <td class="text-center">5</td>
+                                                                            <td class="text-center">10</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> Staying Alive In Face of Competition.</td>
+                                                                            <td class="text-center">16</td>
+                                                                            <td class="text-center">5</td>
+                                                                            <td class="text-center">10</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> Staying Alive In Face of Competition.</td>
+                                                                            <td class="text-center">16</td>
+                                                                            <td class="text-center">5</td>
+                                                                            <td class="text-center">10</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> Staying Alive In Face of Competition.</td>
+                                                                            <td class="text-center">16</td>
+                                                                            <td class="text-center">5</td>
+                                                                            <td class="text-center">10</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> Staying Alive In Face of Competition.</td>
+                                                                            <td class="text-center">16</td>
+                                                                            <td class="text-center">5</td>
+                                                                            <td class="text-center">10</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> Staying Alive In Face of Competition.</td>
+                                                                            <td class="text-center">16</td>
+                                                                            <td class="text-center">5</td>
+                                                                            <td class="text-center">10</td>
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div> -->
+
+                                <!-- End of Table -->
+
+                                <!-- Post Metrics Card -->
+                                <h3> Number of Posts today = 5</h3>
+                                <div class="content">
+                                    <div class="container-fluid">
+                                        <div class="row">
+
+
+                                            <div class="row">
+
+                                                <!-- First ROw -->
+
+                                                <div class="col-md-2">
+                                                    <div class="card">
+                                                        <div class="header">
+                                                            <i class="fa fa-thumbs-up"></i>
+                                                            <bold>Likes</bold>
+                                                            <br>
+                                                            <br>
+                                                            <h1 class="title5">1,506</h1>
+                                                            <br>
+                                                            <hr>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="card">
+                                                        <div class="header">
+                                                            <i class="fa fa-thumbs-up"></i>
+                                                            <bold>Comments</bold>
+                                                            <br>
+                                                            <br>
+                                                            <h1 class="title5">1,506</h1>
+                                                            <br>
+                                                            <hr>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="card">
+                                                        <div class="header">
+                                                            <i class="fa fa-thumbs-up"></i>
+                                                            <bold>Shares</bold>
+                                                            <br>
+                                                            <br>
+                                                            <h1 class="title5">1,506</h1>
+                                                            <br>
+                                                            <hr>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="card">
+                                                        <div class="header">
+                                                            <i class="fa fa-thumbs-up"></i>
+                                                            <bold>Likes</bold>
+                                                            <br>
+                                                            <br>
+                                                            <h1 class="title5">1,506</h1>
+                                                            <br>
+                                                            <hr>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="card">
+                                                        <div class="header">
+                                                            <i class="fa fa-thumbs-up"></i>
+                                                            <bold>Comments</bold>
+                                                            <br>
+                                                            <br>
+                                                            <h1 class="title5">1,506</h1>
+                                                            <br>
+                                                            <hr>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="card">
+                                                        <div class="header">
+                                                            <i class="fa fa-thumbs-up"></i>
+                                                            <bold>Shares</bold>
+                                                            <br>
+                                                            <br>
+                                                            <h1 class="title5">1,506</h1>
+                                                            <br>
+                                                            <hr>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <!-- End of First Row -->
+
+                                            <!-- End of Second Row -->
+
+
+                                            <!-- Third ROw -->
+                                            <!--
+                                                                        <div class="col-md-3">
+                                                                                <div class="card">
+                                                                                    <div class="header">
+                                                                                        <br>
+                                                                                        <br>
+                                                                                        <p><strong>Post With Most Reach: 4th Post</strong></p>
+                                                                                        <br>
+                                                                                        <br>
+                                                                                        <hr>
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div> -->
+
+                                            <!-- <div class="col-md-3">
+                                                    <div class="card">
+                                                        <div class="header">
+                                                            <br>
+                                                            <br>
+                                                            <p><strong>Post With Most Reach: 4th Post</strong></p>
+                                                            <br>
+                                                            <br>
+                                                            <hr>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                        <div class="card">
+                                                            <div class="header">
+                                                                <br>
+                                                                <br>
+                                                                <p><strong>Post With Most Reach: 4th Post</strong></p>
+                                                                <br>
+                                                                <br>
+                                                                <hr>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                            <div class="card">
+                                                                <div class="header">
+                                                                    <br>
+                                                                    <br>
+                                                                    <p><strong>Post With Most Reach: 4th Post</strong></p>
+                                                                    <br>
+                                                                    <br>
+                                                                    <hr>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                               -->
+                                            <!-- End of Third Row -->
+
+
+                                        </div>
+                                        <!-- <div>
+                                           <h4 class='text-center'>Compare Post's Performance</h4>
+                                           <div class="dropdown">
+                                               <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Metric
+                                               <span class="caret"></span></button>
+                                               <ul class="dropdown-menu text-center">
+                                                 <li><a href="#">Engagement</a></li>
+                                                 <li><a href="#">Reach</a></li>
+                                                 <li><a href="#">Negative Feedback</a></li>
+                                               </ul>
+                                           </div> -->
+                                        <br> <br>
+                                        <div class='row'>
+                                            <div class='col-md-4 card'>
+                                                <h4 class="text-center"><strong>Post 1</strong></h4>
+
+                                                <div class="dropdown text-center">
+                                                    <button class="btn btn-primary dropdown-toggle" type="button"
+                                                            data-toggle="dropdown">Select Post
+                                                        <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#"> Staying Alive In Face of Competition.</a></li>
+                                                        <li><a href="#"> Staying Alive In Face of Competition</a></li>
+                                                        <li><a href="#"> Staying Alive In Face of Competition</a></li>
+                                                    </ul>
+                                                    <!-- <h3>12</h3>
+                                                    <a href="dashboard_post_report.html"> <button>See More</button>   </a>  -->
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    <br>
+
+                                                </div>
+                                                <ul>
+                                                    <li>Engagement = 5</li>
+                                                    <li>Reach = 7</li>
+                                                    <li>Negative Feedback = 8</li>
+                                                    <li>Content-type= 8</li>
+                                                </ul>
+                                            </div>
+
+                                            <div class='col-md-4'>
+                                                <br>
+                                                <h5 class='text-center'>VS</h5>
+                                                <br>
+                                                <button class='center-block'>Compare</button>
+
+                                            </div>
+                                            <div class='col-md-4 card'>
+                                                <h4 class="text-center"><strong>Post 2</strong></h4>
+
+                                                <div class="dropdown text-center">
+                                                    <button class="btn btn-primary dropdown-toggle" type="button"
+                                                            data-toggle="dropdown">Select Post
+                                                        <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#"> Staying Alive In Face of Competition</a></li>
+                                                        <li><a href="#"> Staying Alive In Face of Competition</a></li>
+                                                        <li><a href="#"> Staying Alive In Face of Competition</a></li>
+                                                    </ul>
+                                                    <!-- <h3>16</h3>
+                                                    <a href="dashboard_post_report.html"><button>See More</button></a>  -->
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    <br>
+
+                                                </div>
+                                                <!-- <ul>
+                                                        <li>Engagement = 4</li>
+                                                        <li>Reach = 5</li>
+                                                        <li>Negative Feedback =7</li>
+                                                        <li>Content-type = 8</li>
+                                                    </ul> -->
+                                            </div>
+                                        </div>
+                                        <div><p>Post 1 did better than Post 2 because ..... </p></div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Post Metrics Card Finish -->
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="footer">
+                    <div class="container-fluid">
+                    </div>
+                </footer>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

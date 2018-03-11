@@ -1,6 +1,8 @@
 import os
 import sys
 
+import dateutil.parser as date_parser
+
 sys.path.append(os.getcwd())
 
 from flask import Flask, render_template, request, jsonify, json, redirect, url_for, flash
@@ -79,13 +81,13 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('user_dashboard'))
+        return redirect(url_for('dashboard_add_account'))
     if request.method == 'POST':
         try:
             user = UserModel.get(UserModel.email == request.form['email'])
             if check_password_hash(user.password_hash, request.form['password']):
                 login_user(user, True)
-                return redirect(url_for('user_dashboard'))
+                return redirect(url_for('dashboard_add_account'))
             else:
                 flash('Authentication failed.')
         except Exception as ex:
@@ -104,34 +106,70 @@ def logout():
 
 # dashboard home page
 @app.route('/')
-@app.route('/dashboard')
+@app.route('/dashboard/accounts')
 @login_required
-def user_dashboard():
-    return render_template('dashboard.html')
+def dashboard_add_account():
+    return render_template('dashboard_add_account.html')
 
 
-@app.route('/dashboard/marketing')
+@app.route('/dashboard/post')
 @login_required
-def user_marketing_obj_dashboard():
-    return render_template('dashboard_marketing.html')
+def dashboard_post_list():
+    return render_template('dashboard_post.html')
 
 
-@app.route('/dashboard/user_guide')
+@app.route('/dashboard/advice_1')
 @login_required
-def user_guide_dashboard():
-    return render_template('dashboard_userguide.html')
+def dashboard_advice_one():
+    return render_template('dashboard_advice_1.html')
 
 
-@app.route('/dashboard/report')
+@app.route('/dashboard/advice_summary')
 @login_required
-def user_report_dashboard():
-    return render_template('dashboard_report.html')
+def dashboard_advice_summary():
+    return render_template('dashboard_advice_summary.html')
+
+
+@app.route('/dashboard/daily_report')
+@login_required
+def dashboard_daily_report():
+    return render_template('dashboard_daily_report.html')
+
+
+@app.route('/dashboard/post_analytics')
+@login_required
+def dashboard_post_analytics():
+    return render_template('dashboard_post_analytics.html')
+
+
+@app.route('/dashboard/post_report')
+@login_required
+def dashboard_post_report():
+    return render_template('dashboard_post_report.html')
+
+
+@app.route('/dashboard/weekly_analytics')
+@login_required
+def dashboard_weekly_analytics():
+    return render_template('dashboard_weekly_analytics.html')
+
+
+@app.route('/dashboard/weekly_report')
+@login_required
+def dashboard_weekly_report():
+    return render_template('dashboard_weekly_report.html')
+
+
+@app.route('/dashboard/weekly')
+@login_required
+def dashboard_weekly():
+    return render_template('weekly.html')
 
 
 @app.route('/authorize/<provider>')
 def oauth_authorize(provider):
     if current_user.page_id is not None:
-        return redirect(url_for('user_dashboard'))
+        return redirect(url_for('dashboard_post_list'))
     oauth = OAuthSignIn.get_provider(provider)
     return oauth.authorize()
 
@@ -139,7 +177,7 @@ def oauth_authorize(provider):
 @app.route('/callback/<provider>')
 def oauth_callback(provider):
     if current_user.page_id is not None:
-        return redirect(url_for('user_dashboard'))
+        return redirect(url_for('dashboard_post_list'))
 
     oauth = OAuthSignIn.get_provider(provider)
     social_id, social_username, social_email, account_data = oauth.callback()
@@ -150,7 +188,7 @@ def oauth_callback(provider):
 
     if social_id is None:
         flash('Authentication failed.')
-        return redirect(url_for('user_dashboard'))
+        return redirect(url_for('dashboard_add_account'))
 
     try:
         query = UserModel.update(
@@ -163,11 +201,11 @@ def oauth_callback(provider):
 
         if query.execute() < 1:
             flash('adding account failed.')
-            return redirect(url_for('user_dashboard'))
+            return redirect(url_for('dashboard_add_account'))
 
     except Exception as ex:
         print(ex.args)
-    return redirect(url_for('user_dashboard'))
+    return redirect(url_for('dashboard_post_list'))
 
 
 @app.route('/set_properties')
@@ -186,14 +224,23 @@ def set_properties():
 
     post_metrics_properties["fan_adds"] = fan_adds
 
-    posts_stats = page.get_node_properties("posts.since(2014-06-08).until(2014-06-09).fields(id,shares,likes.summary("
-                                           "true).limit(0),comments.summary(true).limit(0))")["posts"]["data"]
+    posts_stats = page.get_node_properties(
+        "posts.since(2014-06-08).until(2014-06-09).fields(id,message,created_time,shares,likes.summary(true).limit(0),comments.summary(true).limit(0))")[
+        "posts"]["data"]
 
-    new_dict = dict((item["id"], item) for item in posts_stats)
+    # new_dict = dict((item["id"], item) for item in posts_stats)
     # print("newdict: {}".format(new_dict))
     page_post = None
-    for key, val in new_dict.items():
-        page_post = graph.PageOrPost(key, current_user.access_token)
+    for val in posts_stats:
+        # print("post data: {}".format(val))
+        page_post = graph.PageOrPost(val['id'], current_user.access_token)
+
+        date_time = date_parser.parse(val["created_time"])
+        created_date = str(date_time.date())
+        created_time = str(date_time.time())
+
+        post_title = val.get('message')
+
         try:
             shares = val["shares"]["count"]
         except KeyError:
@@ -233,13 +280,16 @@ def set_properties():
         except KeyError:
             lifetime_negative_feedback = 0
 
-        post_metrics_properties[key] = {"shares": shares,
-                                        "likes": likes,
-                                        "comments": comments,
-                                        "lifetime_post_reach": lifetime_post_reach,
-                                        "lifetime_engaged_users": lifetime_engaged_users,
-                                        "clicks": clicks,
-                                        "lifetime_negative_feedback": lifetime_negative_feedback}
+        post_metrics_properties[val['id']] = {"post_title": post_title,
+                                              "created_date": created_date,
+                                              "created_time": created_time,
+                                              "shares": shares,
+                                              "likes": likes,
+                                              "comments": comments,
+                                              "lifetime_post_reach": lifetime_post_reach,
+                                              "lifetime_engaged_users": lifetime_engaged_users,
+                                              "clicks": clicks,
+                                              "lifetime_negative_feedback": lifetime_negative_feedback}
 
     # print("post_metrics_properties: {}".format(post_metrics_properties))
     return jsonify(post_metrics_properties)

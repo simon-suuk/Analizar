@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="wrapper">
+        <div class="sidebar" data-color="purple" data-image="{{ url_for('static', filename='img/sidebar-5.jpg') }}">
+
+            <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
+
+
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a class="simple-text">
+                        Analizar
+                    </a>
+                </div>
+
+                <ul class="nav">
+                    <li class="active">
+                        <a href="{{ url_for('dashboard_add_account') }}">
+                            <i class="pe-7s-graph"></i>
+                            <p>Add Accounts</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dashboard_post_list') }}">
+                            <i class="pe-7s-graph"></i>
+                            <p>Posts</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dashboard_post_analytics') }}">
+                            <i class="pe-7s-user"></i>
+                            <p>Analytics</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="pe-7s-note2"></i>
+                            <p>Settings</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="pe-7s-note2"></i>
+                            <p>Integrations</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <nav class="navbar navbar-default navbar-fixed">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                data-target="#navigation-example-2">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Post Report</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-dashboard"></i>
+                                    <p class="hidden-lg hidden-md">Dashboard</p>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="">
+                                    <i class="fa fa-search"></i>
+                                    <p class="hidden-lg hidden-md">Search</p>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="">
+                                    <p>Account</p>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ url_for('logout') }}">
+                                    <p>Log out</p>
+                                </a>
+                            </li>
+                            <li class="separator hidden-lg hidden-md"></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <!-- First ROw -->
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="header">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <bold>Analysis</bold>
+                                    <br>
+                                    <br>
+                                    <h5 class="title1">You Gained 2 More Followers</h5>
+                                    <small>As A Result of Your Last Post</small>
+                                    <br>
+                                    <br>
+
+
+                                    <p>
+                                        <a class="btn btn-primary1" data-toggle="collapse" href="#collapseExample"
+                                           role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            Check How You Do Better
+                                        </a>
+                                    </p>
+
+                                    <div class="collapse" id="collapseExample">
+                                        <div class="card card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                                            richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes
+                                            anderson cred nesciunt sapiente ea proident.
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="header">
+
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <bold>Analysis</bold>
+                                    <br>
+                                    <br>
+                                    <h5 class="title1">Your Post View is Low</h5>
+                                    <small>Although it was an improvement from yesterdays</small>
+                                    <br>
+                                    <br>
+
+                                    <p>
+                                        <a class="btn btn-primary1" data-toggle="collapse" href="#collapseExample2"
+                                           role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            Check How You Do Betterb
+                                        </a>
+                                    </p>
+
+                                    <div class="collapse" id="collapseExample2">
+                                        <div class="card card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                                            richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes
+                                            anderson cred nesciunt sapiente ea proident.
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="header">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <bold>Analysis</bold>
+                                    <br>
+                                    <br>
+                                    <h5 class="title1">Your Post Engagement is Low</h5>
+                                    <small>Given the number of people who viewed your post.</small>
+                                    <br>
+                                    <br>
+
+                                    <p>
+                                        <a class="btn btn-primary1" data-toggle="collapse" href="#collapseExample3"
+                                           role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            Check How You Do Betterk
+                                        </a>
+                                    </p>
+
+                                    <div class="collapse" id="collapseExample3">
+                                        <div class="card card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                                            richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes
+                                            anderson cred nesciunt sapiente ea proident.
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="header">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <bold>Analysis</bold>
+                                    <br>
+                                    <br>
+                                    <h5 class="title1">Your Post Got 0 Negative Feedbacks</h5>
+                                    <br>
+                                    <br>
+                                    <p>
+                                        <a class="btn btn-primary1" data-toggle="collapse" href="#collapseExample4"
+                                           role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            Check How You Do Betterk
+                                        </a>
+                                    </p>
+
+                                    <div class="collapse" id="collapseExample4">
+                                        <div class="card card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                                            richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes
+                                            anderson cred nesciunt sapiente ea proident.
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- End of First Row -->
+                </div>
+
+                <footer class="footer">
+                    <div class="container-fluid">
+                    </div>
+                </footer>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

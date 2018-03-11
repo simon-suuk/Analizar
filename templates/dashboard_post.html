@@ -1,0 +1,361 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="wrapper">
+        <div class="sidebar" data-color="purple" data-image="{{ url_for('static', filename='img/sidebar-5.jpg') }}">
+
+
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a class="simple-text">
+                        Analizar
+                    </a>
+                </div>
+
+                <ul class="nav">
+                    <li class="active">
+                        <a href="{{ url_for('dashboard_add_account') }}">
+                            <i class="pe-7s-graph"></i>
+                            <p>Add Accounts</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dashboard_post_list') }}">
+                            <i class="pe-7s-graph"></i>
+                            <p>Posts</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dashboard_post_analytics') }}">
+                            <i class="pe-7s-user"></i>
+                            <p>Analytics</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="pe-7s-note2"></i>
+                            <p>Settings</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="pe-7s-note2"></i>
+                            <p>Integrations</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <nav class="navbar navbar-default navbar-fixed">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                data-target="#navigation-example-2">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Dashboard</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-left">
+
+                            <li>
+                                <a href="">
+                                    <i class="fa fa-search"></i>
+                                    <p class="hidden-lg hidden-md">Search</p>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="">
+                                    <p>Account</p>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ url_for('logout') }}">
+                                    <p>Log out</p>
+                                </a>
+                            </li>
+                            <li class="separator hidden-lg"></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Top Metric Counts Section -->
+
+            <section class="dashboard-counts section-padding">
+                <div class="container-fluid">
+                    <div class="row">
+                        <p class="iflixwelcome">Welcome <strong>{{ current_user.social_username }}</strong>; Here is a
+                            summary of the posts we found on your Facebook Page and their engagement summary</p>
+                        <br>
+                        <br>
+                        <!-- Count item widget-->
+                        <div class="col-md-5">
+                            <!-- Placeholder to preserve space-->
+                        </div>
+
+                        <!-- Count item widget-->
+                        <div class="col-md-1">
+                            <button id="legend"></button> &nbsp; High
+
+                        </div>
+
+                        <!-- Count item widget-->
+                        <div class="col-md-1">
+                            <button id="legend1"></button> &nbsp; Ok
+
+                        </div>
+
+                        <!-- Count item widget-->
+                        <div class="col-md-1">
+                            <button id="legend2"></button> &nbsp; Low
+
+                        </div>
+                        <div class="col-md-4">
+                            <!-- DatePicker -->
+                            <label for="dateofbirth"><input type="date" name="dateofbirth" id="dateofbirth"></label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Rows of Posts and Metrics -->
+
+
+                <div class="content">
+                    <div class="container-fluid">
+                        <div class="col-md-12">
+                            <div class="card">
+
+                                <hr>
+                                <!-- Zero Post -->
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <ul class="news list-unstyled">
+                                            <li class="d-flex justify-content-between">
+                                                <div class="left-col d-flex">
+                                                    <div class="title">
+
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="name"><strong class="text-uppercase">Negative Feedback</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="name"><strong class="text-uppercase">Engagement</strong></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="name"><strong class="text-uppercase">Reach</strong></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <!-- <div class="name"><strong class="text-uppercase">23</strong></div> -->
+                                    </div>
+
+                                    <!-- <div class="col-md-3">
+                                        <a class="btn btn-primary" href="dashboard_post_report.html" role="button">View Post Report</a>
+                                    </div> -->
+
+
+                                </div>
+                                <hr>
+
+
+                                <!-- First Post -->
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <ul class="news list-unstyled">
+                                            <li class="d-flex justify-content-between">
+                                                <div class="left-col d-flex">
+                                                    <div class="title">
+                                                        <i class="fa fa-paperclip"></i>
+                                                        <a href="#">
+                                                            <strong class="ttt">Staying Alive In Face of
+                                                                Competition.</strong>
+                                                        </a>
+                                                        <div class="update-date">13:01<span class="updates-month">[24/01/2018]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="center-block" id="circle"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div id="circle2"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div id="circle1"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+
+                                        <a class="btn btn-primary" href="{{ url_for('dashboard_post_report') }}"
+                                           role="button">View Post Report</a>
+                                    </div>
+
+                                </div>
+                                <hr>
+
+                                <!-- Second Post -->
+
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <ul class="news list-unstyled">
+                                            <li class="d-flex justify-content-between">
+                                                <div class="left-col d-flex">
+                                                    <div class="title">
+                                                        <i class="fa fa-paperclip"></i>
+                                                        <a href="#">
+                                                            <strong class="ttt">Melanin Wigs and Makeup.</strong>
+                                                        </a>
+                                                        <div class="update-date">13:01<span class="updates-month">[24/01/2018]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="center-block" id="circle2"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div id="circle"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div id="circle1"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+
+                                        <a class="btn btn-primary" href="{{ url_for('dashboard_post_report') }}"
+                                           role="button">View Post Report</a>
+                                    </div>
+
+                                </div>
+                                <hr>
+                                <!-- Third Post -->
+
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <ul class="news list-unstyled">
+                                            <li class="d-flex justify-content-between">
+                                                <div class="left-col d-flex">
+                                                    <div class="title">
+                                                        <i class="fa fa-paperclip"></i>
+                                                        <a href="#">
+                                                            <strong class="ttt">Here's my makeup submission for Black
+                                                                O'Pal.</strong>
+                                                        </a>
+                                                        <div class="update-date">13:01<span class="updates-month">[24/01/2018]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="center-block" id="circle1"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div id="circle2"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div id="circle"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+
+                                        <a class="btn btn-primary" href="{{ url_for('dashboard_post_report') }}"
+                                           role="button">View Post Report</a>
+                                    </div>
+
+                                </div>
+                                <hr>
+                                <!-- Fourth Post -->
+
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <ul class="news list-unstyled">
+                                            <li class="d-flex justify-content-between">
+                                                <div class="left-col d-flex">
+                                                    <div class="title">
+                                                        <i class="fa fa-paperclip"></i>
+                                                        <a href="#">
+                                                            <strong class="ttt">It's Easter Monday, Come Party With
+                                                                Us.</strong>
+                                                        </a>
+                                                        <div class="update-date">13:01<span class="updates-month">[24/01/2018]</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="center-block" id="circle1"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div id="circle2"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div id="circle2"></div>
+                                    </div>
+
+                                    <div class="col-md-2">
+
+                                        <a class="btn btn-primary" href="{{ url_for('dashboard_post_report') }}"
+                                           role="button">View Post Report</a>
+                                    </div>
+
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <footer class="footer">
+            <div class="container-fluid">
+            </div>
+        </footer>
+    </div>
+{% endblock %}

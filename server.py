@@ -2,6 +2,7 @@ import os
 import sys
 
 import dateutil.parser as date_parser
+from datetime import date
 
 sys.path.append(os.getcwd())
 
@@ -115,13 +116,15 @@ def dashboard_add_account():
 @app.route('/dashboard/post')
 @login_required
 def dashboard_post_list():
-    return render_template('dashboard_post.html')
+    user_posts = set_properties()
+    # print("user_post: {} {}".format(type(user_posts), user_posts))
+    return render_template('dashboard_post.html', user_posts=user_posts)
 
 
-@app.route('/dashboard/advice_1')
+@app.route('/dashboard/advice')
 @login_required
-def dashboard_advice_one():
-    return render_template('dashboard_advice_1.html')
+def dashboard_advice():
+    return render_template('dashboard_advice.html')
 
 
 @app.route('/dashboard/advice_summary')
@@ -160,6 +163,12 @@ def dashboard_weekly_report():
     return render_template('dashboard_weekly_report.html')
 
 
+@app.route('/dashboard/user')
+@login_required
+def dashboard_user():
+    return render_template('user.html')
+
+
 @app.route('/dashboard/weekly')
 @login_required
 def dashboard_weekly():
@@ -181,8 +190,8 @@ def oauth_callback(provider):
 
     oauth = OAuthSignIn.get_provider(provider)
     social_id, social_username, social_email, account_data = oauth.callback()
-    page_id = account_data[2].get("id")
-    access_token = account_data[2].get("access_token")
+    page_id = account_data[0].get("id")
+    access_token = account_data[0].get("access_token")
 
     # print('My Account Page_id: {} My Account Access_token:{}'.format(page_id, access_token))
 
@@ -208,7 +217,7 @@ def oauth_callback(provider):
     return redirect(url_for('dashboard_post_list'))
 
 
-@app.route('/set_properties')
+# @app.route('/set_properties')
 @login_required
 def set_properties():
     post_metrics_properties = {}
@@ -219,13 +228,20 @@ def set_properties():
         print(ex.args)
 
     post_metrics_properties["fan_base"] = page.get_node_properties("fan_count")["fan_count"]
-    fan_adds = page.get_node_properties("insights.since(2018-03-06).metric(page_fan_adds)"
-                                        ".fields(title, values)")["insights"]["data"][0]["values"][0]["value"]
+
+    today = date.today().strftime('%Y-%m-%d')
+    fan_adds = page.get_node_properties("insights.since({today}).metric(page_fan_adds)"
+                                        ".fields(title, values)".format(today=today))["insights"]["data"][0]["values"][
+        0]["value"]
 
     post_metrics_properties["fan_adds"] = fan_adds
 
+    # posts_stats = page.get_node_properties(
+    #     "posts.since(2014-06-08).until(2014-06-09).fields(id,message,created_time,shares,likes.summary(true).limit(0),comments.summary(true).limit(0))")[
+    #     "posts"]["data"]
+
     posts_stats = page.get_node_properties(
-        "posts.since(2014-06-08).until(2014-06-09).fields(id,message,created_time,shares,likes.summary(true).limit(0),comments.summary(true).limit(0))")[
+        "posts.limit(3).fields(id,message,created_time,shares,likes.summary(true).limit(0),comments.summary(true).limit(0))")[
         "posts"]["data"]
 
     # new_dict = dict((item["id"], item) for item in posts_stats)
@@ -292,7 +308,7 @@ def set_properties():
                                               "lifetime_negative_feedback": lifetime_negative_feedback}
 
     # print("post_metrics_properties: {}".format(post_metrics_properties))
-    return jsonify(post_metrics_properties)
+    return post_metrics_properties
 
 
 @app.route('/fetch_page_edge/<edge_name>')

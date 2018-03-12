@@ -1,226 +1,112 @@
 {% extends 'base.html' %}
 {% block body %}
-    <div class="wrapper">
-        <div class="sidebar" data-color="purple" data-image="{{ url_for('static', filename='img/sidebar-5.jpg') }}">
-
-            <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
-
-
-            <div class="sidebar-wrapper">
-                <div class="logo">
-                    <a class="simple-text">
-                        Analizar
-                    </a>
+    <div class="main-panel">
+        <nav class="navbar navbar-default navbar-fixed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#navigation-example-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Analizar Advice</a>
                 </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-dashboard"></i>
+                                <p class="hidden-lg hidden-md">Dashboard</p>
+                            </a>
+                        </li>
 
-                <ul class="nav">
-                    <li class="active">
-                        <a href="{{ url_for('dashboard_add_account') }}">
-                            <i class="pe-7s-graph"></i>
-                            <p>Add Accounts</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('dashboard_post_list') }}">
-                            <i class="pe-7s-graph"></i>
-                            <p>Posts</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('dashboard_post_analytics') }}">
-                            <i class="pe-7s-user"></i>
-                            <p>Analytics</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="pe-7s-note2"></i>
-                            <p>Settings</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="pe-7s-note2"></i>
-                            <p>Integrations</p>
-                        </a>
-                    </li>
+                        <li>
+                            <a href="">
+                                <i class="fa fa-search"></i>
+                                <p class="hidden-lg hidden-md">Search</p>
+                            </a>
+                        </li>
+                    </ul>
 
-                </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="">
+                                <p>Account</p>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url_for('logout') }}">
+                                <p>Log out</p>
+                            </a>
+                        </li>
+                        <li class="separator hidden-lg hidden-md"></li>
+                    </ul>
+                </div>
             </div>
+        </nav>
+
+        <div class="header text-center">
+            <h4 class="title"><strong>Advice Card</strong></h4>   <br>
+            <!-- DatePicker -->
+            <label for="dateofbirth">Date: <input type="date" name="dateofbirth" id="dateofbirth"></label>
         </div>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
 
-        <div class="main-panel">
-            <nav class="navbar navbar-default navbar-fixed">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse"
-                                data-target="#navigation-example-2">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="#">Analizar Advice</a>
+                    <!-- First ROw -->
+                    <div class="col-md-3">
+                        <!-- <div class="card">
+                            <br>
+                            <br>
+                                <a  href="dailyreport.html">
+                                    <img src="assets/img/report.svg" width="200px" height="200px"><br>
+                                    <p class="dailyreport">Daily Report</p>
+                                </a>
+                            <br>
+                            <br>
+                        </div> -->
                     </div>
-                    <div class="collapse navbar-collapse">
-                        <ul class="nav navbar-nav navbar-left">
-                            <li>
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-dashboard"></i>
-                                    <p class="hidden-lg hidden-md">Dashboard</p>
-                                </a>
-                            </li>
+                    <!-- End Of First ROw -->
 
-                            <li>
-                                <a href="">
-                                    <i class="fa fa-search"></i>
-                                    <p class="hidden-lg hidden-md">Search</p>
-                                </a>
-                            </li>
-                        </ul>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <br>
+                            <br>
 
-                        <ul class="nav navbar-nav navbar-right">
-                            <li>
-                                <a href="">
-                                    <p>Account</p>
-                                </a>
-                            </li>
+                            <div class='text-center'>
 
-                            <li>
-                                <a href="{{ url_for('logout') }}">
-                                    <p>Log out</p>
-                                </a>
-                            </li>
-                            <li class="separator hidden-lg hidden-md"></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-
-
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-
-                        <!-- First ROw -->
-
-
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="header">
-                                    <h4><i class="fa fa-eye"></i>
-                                        <bold></bold>
-                                        Overview</bold></h4>
-
-                                    <!-- <h5 class="title1">Overview</h5>
-                                     <small>As A Result of Your Last Post</small>
-                                     <br>
-                                     <br> -->
-
-
-                                    <ul>
-                                        <li><p>Aww...you got <strong><span style="color:red">NO</span></strong> new Fans
-                                            today. The usual cause for this is that your post did not reach a lot of
-                                            people outside your Fan base.
-                                            <p></p></li>
-
-                                        <li><p> Your stats for today shows that your Post view is quite <strong><span
-                                                style="color:red">low</span></strong>, although it is an improvement
-                                            from yesterday’s post it can still be better.</p></li>
-
-                                        <li><p>Your engagement level is <strong> <span style="color:red">low</span>
-                                        </strong> as well. Given the number of people who viewed your post, the
-                                            interaction level is quite low.</p></li>
-
-                                        <li><p>Your post got <strong><span style="color:red">no</span></strong> negative
-                                            feedback.</p></li>
-
-                                    </ul>
-                                    <!-- <i class="fa fa-eye"></i>
-                                    <bold class="title1">Overview</bold>
-                                    <br>
-                                    <br>
-
-                                    <ul>
-
-                                        <li>Aww...you got <strong>NO</strong> new Fans today. The usual cause for this is that your post did not reach a lot of people outside your Fan base.</li>
-                                        <br>
-                                        <li>Your Post View is quite <strong>LOW</strong>. The usual cause for this is that at the time you posted, your audience were not active online.</li>
-                                        <br>
-                                        <li>Your Post Engagement is <strong>LOW</strong> Given the number of people who viewed your post, the interaction level is quite low. The usual cause for this is that your content did not move them to take an action.</li>
-                                        <br>
-                                        <li>Your post got <strong>2</strong> negative feedbacks. The usual cause for this is that these fans did not find your Posts relevant to them.</li>
-                                    </ul>       -->
-
-                                </div>
-
-
-                                <footer class="footer">
-                                    <div class="container-fluid">
-                                    </div>
-                                </footer>
-
-
+                                <p>Target people in Accra</p>
+                                <p>Post more between 1pm – 2pm</p>
+                                <p>Cross Promote with Flavour Bakery</p>
+                                <p>Post less Promotional content</p>
+                                <br>
                             </div>
+                            <a class="btn btn-primary2" href="{{ url_for('dashboard_advice') }}" role="button">See
+                                More</a>
+                            <br>
+                            <br>
+                            <br>
                         </div>
-
-                        <!-- End Of First ROw -->
-
-
-                        <!-- Second ROw -->
-
-
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="header">
-                                    <h4><i class="fa fa-volume-up"></i>
-                                        <bold></bold>
-                                        Here's What You Can Do To Improve</bold></h4>
-
-
-                                    <!-- <i class="fa fa-volume-up"></i>
-                                    <bold class="title1">Here's What You Can Do To Improve</bold>
-                                    <br> -->
-
-                                    <p>Based on the Overview above and your Metrics:</p>
-
-                                    <ul>
-                                        <li><p>People from <strong>Accra</strong> viewed your Post the most, try
-                                            targeting them more for such Posts to instill their interest. This helps you
-                                            put the right content in the faces of the right people in order to reduce
-                                            negative feedbacks. Also when posting similar content, use the hashtag
-                                            <strong>#Accra</strong> to get more organic reach and follows from
-                                            interested people in your locality.</p></li>
-                                        <br>
-                                        <li><p> Your audience are mostly active between 12pm to 1pm, you should post at
-                                            that time to get more views from fans. They are more inclined to stay on
-                                            your Post longer and even engage.</p></li>
-                                        <br>
-                                        <li><p> Allowing people and other businesses to tag your page and share it with
-                                            others is a great way to expand your reach to other audiences and boost
-                                            Engagement. Consider Partnering with <strong>Flavour Bakery</strong> because
-                                            they offer a supporting Service to yours in Accra, also, <strong>Nana
-                                                Kwame</strong> can be a good Influencer for your product.</p></li>
-                                        <br>
-                                        <li><p> Consider your content type and ensure it is not always Promotional else
-                                            your audience’s interest in your Posts will reduce. Your content should
-                                            always be 80% user focused and 20% promotional.</p></li>
-                                    </ul>
-
-                                </div>
-
-
-                                <footer class="footer">
-                                    <div class="container-fluid">
-                                    </div>
-                                </footer>
-
-
-                            </div>
-                        </div>
-
-                        <!-- End Of Second ROw -->
                     </div>
+
+                    <!-- Second Card -->
+                    <div class="col-md-3">
+                        <!-- <div class="card">
+                                <br>
+                                <br>
+                                    <a  href="weeklyanalytics.html">
+                                        <img src="assets/img/report (1).svg" width="200px" height="200px"><br>
+                                        <p class="dailyreport">Weekly Report</p>
+                                    </a>
+                                <br>
+                                <br>
+                            </div> -->
+                    </div>
+                    <!-- End of Second Card -->
                 </div>
             </div>
         </div>

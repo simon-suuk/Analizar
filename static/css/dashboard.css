@@ -3881,6 +3881,13 @@ img{
     background-color: #6550BA;
 }
 
+.btn-primary2 {
+    border-color: #6550BA;
+    color: #fff;
+    background-color: #6550BA;
+    margin-left: 220px;
+}
+
 
 .facebook_list{
     color:#3b5998;
@@ -3940,7 +3947,7 @@ img{
 .update-date {
     font-size: 1em;
     font-weight: 700;
-    color: #D81159;
+    color: #777;
     display: block;
     padding-left: 23px;
 }
@@ -3975,7 +3982,7 @@ img{
 }
 
 .ttt{
-    color: #fdc23e;
+    color: #000;
 }
 
 .reach1{
@@ -4025,12 +4032,61 @@ img{
 
 
   .iflixwelcome{
-      margin-left: 30px;
-      color: #7200da;
+      margin-left: 20px;
+      /* color: #7200da; */
   }
 
 
   .dailyreport{
     /* display: block !important;  */
     margin-left: 200px;
+}
+
+
+#circle {
+    background: #3ac569;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+#legend {
+    background: #3ac569;
+    width: 15px;
+    height: 15px;
+    border-color: #3ac569;
+}
+#legend1{
+    background: #f9a11b;
+    width: 15px;
+    height: 15px;
+    border-color: #f9a11b;
+}
+#legend2 {
+    background: #e94e77;
+    width: 15px;
+    height: 15px;
+    border-color: ##e94e77;
+}
+
+
+#circle1 {
+    background:#f9a11b;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+#circle2 {
+    background: #e94e77;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+/* The Button In Post Analysis That Allows Simulation */
+select,twoc {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    float: right;
 }

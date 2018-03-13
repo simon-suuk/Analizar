@@ -132,46 +132,50 @@
 
 
                             <!-- First Post -->
-                            {% for post in user_posts.values() %}
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <ul class="news list-unstyled">
-                                            <li class="d-flex justify-content-between">
-                                                <div class="left-col d-flex">
-                                                    <div class="title">
-                                                        <i class="fa fa-paperclip"></i>
-                                                        <a href="#">
-                                                            <strong class="ttt">{{ post.title }}</strong>
-                                                        </a>
-                                                        <div class="update-date">{{ post.created_time }}<span
-                                                                class="updates-month">[{{ post.created_date }}]</span>
+                            {% for post_id, post in user_posts.items() %}
+                                {% if post.post_title is none %}
+                                {% else %}
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <ul class="news list-unstyled">
+                                                <li class="d-flex justify-content-between">
+                                                    <div class="left-col d-flex">
+                                                        <div class="title">
+                                                            <i class="fa fa-paperclip"></i>
+                                                            <a href="#">
+                                                                <strong class="ttt">{{ post.post_title|truncate(100, True) }}</strong>
+                                                            </a>
+                                                            <div class="update-date">{{ post.created_time }}<span
+                                                                    class="updates-month">[{{ post.created_date }}]</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </li>
-                                        </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="center-block" id="circle"></div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div id="circle2"></div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div id="circle1"></div>
+                                        </div>
+
+                                        <div class="col-md-2">
+
+                                            <a class="btn btn-primary"
+                                               href="{{ url_for('dashboard_post_analysis', post_id=post_id) }}"
+                                               role="button">Post Analysis</a>
+                                        </div>
+
                                     </div>
-
-                                    <div class="col-md-2">
-                                        <div class="center-block" id="circle"></div>
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <div id="circle2"></div>
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <div id="circle1"></div>
-                                    </div>
-
-                                    <div class="col-md-2">
-
-                                        <a class="btn btn-primary" href="{{ url_for('dashboard_post_report') }}"
-                                           role="button">Post Analysis</a>
-                                    </div>
-
-                                </div>
-                                <!--hr-->
+                                    <!--hr-->
+                                {% endif %}
                             {% endfor %}
 
                         </div>

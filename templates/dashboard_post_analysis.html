@@ -50,14 +50,15 @@
                 <div class="row">
 
                     <!-- First ROw -->
+
                     <div class="col-md-2">
                         <div class="card">
                             <div class="header">
                                 <i class="fa fa-thumbs-up"></i>
-                                <bold>Likes</bold>
+                                <bold>Engagement</bold>
                                 <br>
                                 <br>
-                                <h1 class="title5">55</h1>
+                                <h1 class="title5">{{ post_metrics.lifetime_engaged_users }}</h1>
                                 <br>
                                 <br>
                                 <hr>
@@ -70,10 +71,10 @@
                         <div class="card">
                             <div class="header">
                                 <i class="fa fa-thumbs-up"></i>
-                                <bold>Comments</bold>
+                                <bold>Reach</bold>
                                 <br>
                                 <br>
-                                <h1 class="title5">12</h1>
+                                <h1 class="title5">{{ post_metrics.lifetime_post_reach }}</h1>
                                 <br>
                                 <br>
                                 <hr>
@@ -86,11 +87,10 @@
                         <div class="card">
                             <div class="header">
                                 <i class="fa fa-thumbs-up"></i>
-                                <bold>Shares</bold>
+                                <bold>Negative Feedback</bold>
                                 <br>
                                 <br>
-                                <h1 class="title5">4</h1>
-                                <br>
+                                <h1 class="title5">{{ post_metrics.lifetime_negative_feedback }}</h1>
                                 <br>
                                 <hr>
                             </div>
@@ -120,8 +120,7 @@
 
                 <!-- End of First Row -->
 
-                <h5>Here's what you still do about the Post and How It Could Boost Your Current Metrics, Select An
-                    Option and See The Projection :</h5>
+                <h5>Here's what you still do about the Post and How It Could Boost Your Current Metrics:</h5>
                 <br>
 
                 <!-- Second ROw -->
@@ -132,24 +131,23 @@
                         <div class="card">
                             <div class="header">
 
-                                <strong>You Could Select One or More Suggestions:</strong>
+                                <strong>Simulate One of The Suggestions And See How It Improves Your Metrics</strong>
                                 <ul>
                                     <br>
                                     <br>
-                                    <li> Add An Hashtag such as #MakeUp #Accra <select class="twoc">
-                                        <option value="zero">TRY</option>
-                                        <option value="ten">IGNORE</option>
-                                    </select></li>
+                                    <li> Add An Hashtag such as #Fashion #Accra
+                                        <button class="btn btn-primary3" id="b">Simulate</button>
+                                    </li>
                                     <br>
-                                    <li> Start A Conversation With People That Liked the post <select>
-                                        <option value="zero">TRY</option>
-                                        <option value="ten">IGNORE</option>
-                                    </select></li>
                                     <br>
-                                    <li> Place A Call To Action Button at The End of Your Caption <select>
-                                        <option value="zero">TRY</option>
-                                        <option value="ten">IGNORE</option>
-                                    </select></li>
+                                    <li> Start A Conversation With People That Liked the post
+                                        <button class="btn btn-primary3" id="c">Simulate</button>
+                                    </li>
+                                    <br>
+                                    <br>
+                                    <li> Place A Call To Action Button on Your Post
+                                        <button class="btn btn-primary3" id="a">Simulate</button>
+                                    </li>
                                     <br>
                                     <br>
                                     <br>
@@ -167,13 +165,18 @@
 
                     <div class="col-md-6">
                         <div class="card">
+
+                            <br>
+                            <strong class="simmtext">Metrics Simulation Engine</strong>
+                            <br>
+                            <br>
                             <div id="pie"></div>
 
-                            <div class="buttons" style="width: 300px; text-align: center;">
-                                <button id="a" style="width:50px;">1</button>
-                                <button id="b" style="width:50px;">2</button>
-                                <button id="c" style="width:50px;">3</button>
-                            </div>
+                            <!-- <div style="width: 300px; text-align: center;">
+                                <button  class="buttons1" id="b" style="width:80px;">Simulate</button>
+                                <button class="buttons2" id="a" style="width:80px;">Simulate</button>
+                                <button class="buttons3" id="c" style="width:80px;">Simulate</button>
+                            </div> -->
 
                             <br>
                         </div>
@@ -320,7 +323,7 @@
                                     <br>
                                     <li> Posts that resonates with a Trending topic tends to score high</li>
                                     <br>
-                                    <li> People love touching posts</li>
+                                    <li> People relate better with pictures</li>
                                 </ul>
 
                                 <hr>

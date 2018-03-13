@@ -4090,3 +4090,30 @@ select,twoc {
     line-height: inherit;
     float: right;
 }
+
+
+.btn-primary3{
+    background-color: #6550BA;
+    border-color: #6550BA;
+    color: #fff;
+    float:right;
+}
+
+.buttons2{
+    background-color: #6550BA;
+    border-color: #6550BA;
+    color: #fff;
+    float:right;
+}
+
+
+.buttons3{
+    float:right;
+    border-color: #6550BA;
+    color: #fff;
+    background-color: #6550BA;
+}
+
+.simmtext{
+    margin-left: 20px;
+}

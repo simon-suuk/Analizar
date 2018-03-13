@@ -71,12 +71,11 @@
                                         {% if current_user.page_id is none %}
                                             <a href="{{ url_for('oauth_authorize', provider='facebook') }}"><img
                                                     src="{{ url_for('static', filename='img/facebook.svg') }}"
-                                                    width="100px" height="100px">Pending Addition</a>
+                                                    width="100px" height="100px"></a>
                                         {% else %}
-                                            <a href="{{ url_for('dashboard_post_list') }}"><img
+                                            <a href="{{ url_for('dashboard_posts') }}"><img
                                                     src="{{ url_for('static', filename='img/facebook.svg') }}"
-                                                    width="100px" height="100px">Account Added! View
-                                                Analytics</a>
+                                                    width="100px" height="100px"></a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -84,14 +83,14 @@
                                 <div class="col-sm-4 mt-2">
                                     <div class="card-block">
                                         <a href=""><img src="{{ url_for('static', filename='img/twitter.svg') }}"
-                                                        width="100px" height="100px">Pending Addition</a>
+                                                        width="100px" height="100px"></a>
                                     </div>
                                 </div>
 
                                 <div class="col-sm-4 mt-2">
                                     <div class="card-block">
                                         <a href=""><img src="{{ url_for('static', filename='img/instagram.svg') }}"
-                                                        width="100px" height="100px">Pending Addition</a>
+                                                        width="100px" height="100px"></a>
                                     </div>
                                 </div>
 

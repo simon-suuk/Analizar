@@ -50,32 +50,28 @@
 
             <ul class="nav">
                 <li class="active">
-                    <a href="{{ url_for('dashboard_add_account') }}">
+                    <a href="{{ url_for('dashboard_accounts') }}">
                         <i class="pe-7s-graph"></i>
                         <p>Add Accounts</p>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('dashboard_post_list') }}">
+                    <a href="{{ url_for('dashboard_posts') }}">
                         <i class="pe-7s-graph"></i>
                         <p>Posts</p>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('dashboard_post_analytics') }}">
+                    <a href="{{ url_for('dashboard_analytics') }}">
                         <i class="pe-7s-user"></i>
                         <p>Analytics</p>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('dashboard_advice_summary') }}">
+                    <a href="{{ url_for('dashboard_reports') }}">
                         <i class="pe-7s-note2"></i>
                         <p>Reports</p>
                     </a>
-                    <ul class="postii">
-                        <li><a href="{{ url_for('dashboard_daily_report') }}"> - Daily Report</a></li>
-                        <li><a href="{{ url_for('dashboard_weekly') }}"> - Weekly Report</a></li>
-                    </ul>
                 </li>
                 <li>
                     <a href="#">

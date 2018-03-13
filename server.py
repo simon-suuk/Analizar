@@ -123,8 +123,13 @@ def dashboard_posts():
     except Exception as ex:
         print(ex.args)
 
-    posts = page_post.get_node_properties("posts.until(2017-12-25).limit(5).fields(id,message,created_time)")["posts"][
-        "data"]
+    try:
+        posts = \
+            page_post.get_node_properties("posts.until(2017-12-25).limit(5).fields(id,message,created_time)")["posts"][
+                "data"]
+    except Exception as ex:
+        flash('We cannot connect to facebook. Please check your network connection and try again')
+        return redirect(url_for('dashboard_accounts'))
 
     for val in posts:
         date_time = date_parser.parse(val["created_time"])
@@ -148,12 +153,16 @@ def dashboard_posts():
 def dashboard_post_analysis(post_id):
     page_post = graph.PageOrPost(post_id, current_user.access_token)
 
-    post_stats_reach = page_post.get_node_properties(
-        "insights.metric(post_impressions_unique,post_engaged_users,post_consumptions_unique,post_negative_feedback_unique).period(lifetime).fields(id,name,values,title)")[
-        "insights"]["data"]
+    try:
+        post_stats_reach = page_post.get_node_properties(
+            "insights.metric(post_impressions_unique,post_engaged_users,post_consumptions_unique,post_negative_feedback_unique).period(lifetime).fields(id,name,values,title)")[
+            "insights"]["data"]
 
-    post_stats_engagement = page_post.get_node_properties(
-        "id,message,created_time,shares,likes.summary(true).limit(0),comments.summary(true).limit(0)")
+        post_stats_engagement = page_post.get_node_properties(
+            "id,message,created_time,shares,likes.summary(true).limit(0),comments.summary(true).limit(0)")
+    except Exception as ex:
+        flash('We cannot connect to facebook. Please check your network connection and try again')
+        return redirect(url_for('dashboard_accounts'))
 
     try:
         lifetime_post_reach = post_stats_reach[0]["values"][0]["value"]
@@ -265,8 +274,8 @@ def oauth_callback(provider):
 
     oauth = OAuthSignIn.get_provider(provider)
     social_id, social_username, social_email, account_data = oauth.callback()
-    page_id = account_data[2].get("id")
-    access_token = account_data[2].get("access_token")
+    page_id = account_data[0].get("id")
+    access_token = account_data[0].get("access_token")
 
     # print('My Account Page_id: {} My Account Access_token:{}'.format(page_id, access_token))
 

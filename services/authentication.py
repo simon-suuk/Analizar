@@ -1,9 +1,9 @@
 import json
 import os
 
-from rauth import OAuth1Service, OAuth2Service
-from services.deprecated_graph import GraphAPI
+import requests
 from flask import url_for, request, redirect, session
+from rauth import OAuth1Service, OAuth2Service
 
 
 class OAuthSignIn(object):
@@ -85,26 +85,24 @@ class FacebookSignIn(OAuthSignIn):
         )
 
     def exchange_access_token_for_page_tokens(self, short_term_token):
-        data = GraphAPI().get(
-            'oauth/access_token',
-            grant_type='fb_exchange_token',
+        token_base_url = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token"
+        token_url = "{token_base_url}&client_id={client_id}&client_secret={client_secret}&fb_exchange_token={fb_exchange_token}".format(
+            token_base_url=token_base_url,
             client_id=self.consumer_id,
             client_secret=self.consumer_secret,
-            fb_exchange_token=short_term_token,
+            fb_exchange_token=short_term_token
+        )
+        long_term_token = requests.get(token_url).json()['access_token']
+
+        pages_base_url = "https://graph.facebook.com"
+        version = "v2.12"
+        pages_url = "{pages_base_url}/me?fields=accounts&access_token={access_token}".format(
+            pages_base_url=pages_base_url,
+            version=version,
+            access_token=long_term_token
         )
 
-        # print('graph data is: {}'.format(data))
-
-        long_term_token = data.get('access_token')
-        # print('long term token is: {}'.format(long_term_token))
-
-        graph = GraphAPI(long_term_token)
-        # print('graph_api data is: {}'.format(graph.__dict__))
-
-        accounts = graph.get('me/accounts')['data']
-        # print('Datatype: {}, Accounts: {}'.format(type(accounts), accounts))
-
-        return accounts
+        return requests.get(pages_url).json()['accounts']['data']
 
 
 class TwitterSignIn(OAuthSignIn):

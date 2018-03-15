@@ -4033,7 +4033,7 @@ img{
 
   .iflixwelcome{
       margin-left: 20px;
-      /* color: #7200da; */
+      color: #7200da;
   }
 
 
@@ -4099,6 +4099,20 @@ select,twoc {
     float:right;
 }
 
+.btn-primary6{
+    background-color: #0077FF;
+    border-color: #0077FF;
+    color: #fff;
+    margin-left: 100px;
+}
+
+.btn-primary7{
+    background-color: #777;
+    border-color: #777;
+    color: #fff;
+    margin-left: 70px;
+}
+
 .buttons2{
     background-color: #6550BA;
     border-color: #6550BA;
@@ -4117,3 +4131,28 @@ select,twoc {
 .simmtext{
     margin-left: 20px;
 }
+
+/* Toying With Cards And Colors */
+
+.ptitle{
+    color: #6550BA;
+}
+
+.styled-select.slate {
+    height: 34px;
+    width: 240px;
+    float: right;
+ }
+
+ .styled-select.slate select {
+    border: 2px solid #6550ba;
+    background-color: #fff;
+    font-size: 12px;
+    height: 34px;
+    width: 150px;
+ }
+
+ .advbut{
+     float:right;
+     color: #6550BA;
+ }

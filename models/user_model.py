@@ -17,4 +17,6 @@ class UserModel(BaseModel):
     social_username = TextField(null=True)
     social_email = TextField(null=True)
     page_id = TextField(null=True)
-    access_token = TextField(null=True)
+    page_name = TextField(null=True)
+    page_category = TextField(null=True)
+    page_token = TextField(null=True)

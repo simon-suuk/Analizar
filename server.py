@@ -10,6 +10,8 @@ from flask import Flask, render_template, request, jsonify, json, redirect, url_
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from services.authentication import OAuthSignIn
 import services.graph_api as graph
+import engines.post_metrics_engine as post_metrics_engine
+import engines.performance_inference_engine as post_performance
 from models.user_model import UserModel
 from models.base_model import DBSingleton
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -117,41 +119,80 @@ def dashboard_accounts():
 @login_required
 def dashboard_posts():
     post_dict = {}
-    page_post = None
-    try:
-        page_post = graph.PageOrPost(current_user.page_id, current_user.access_token)
-    except Exception as ex:
-        print(ex.args)
+    page = graph.PageOrPost(current_user.page_id, current_user.page_token)
+    performance = post_performance.PerformanceInferenceEngine()
 
     try:
-        posts = \
-            page_post.get_node_properties("posts.until(2017-12-25).limit(5).fields(id,message,created_time)")["posts"][
+        fan_base = page.get_node_properties("fan_count")["fan_count"]
+        # print("fan_base: {}".format(fan_base))
+
+        posts_list = \
+            page.get_node_properties("posts.limit(5).fields(id,message,created_time)")["posts"][
                 "data"]
-    except Exception as ex:
+    except:
+        import traceback
+        traceback.print_exc()
         flash('We cannot connect to facebook. Please check your network connection and try again')
         return redirect(url_for('dashboard_accounts'))
 
-    for val in posts:
-        date_time = date_parser.parse(val["created_time"])
+    for post_val in posts_list:
+        date_time = date_parser.parse(post_val["created_time"])
         created_date = str(date_time.date())
         created_time = str(date_time.time())
+        post_title = post_val.get('message')
 
-        post_title = val.get('message')
+        post = graph.PageOrPost(post_val['id'], current_user.page_token)
+        try:
+            post_statistics = post.get_node_properties(
+                "insights.metric(post_impressions_unique,post_engaged_users,post_consumptions_unique,post_negative_feedback_unique).period(lifetime).fields(id,name,values,title)")[
+                "insights"]["data"]
+        except:
+            import traceback
+            traceback.print_exc()
+            flash('We cannot connect to facebook. Please check your network connection and try again')
+            return redirect(url_for('dashboard_accounts'))
 
-        post_dict[val['id']] = {"post_title": post_title,
-                                "created_date": created_date,
-                                "created_time": created_time,
-                                }
+        try:
+            lifetime_post_reach = post_statistics[0]["values"][0]["value"]
+        except KeyError:
+            lifetime_post_reach = 0
 
-    # print("user_post: {}".format(post_dict))
+        try:
+            lifetime_engaged_users = post_statistics[1]["values"][0]["value"]
+        except KeyError:
+            lifetime_engaged_users = 0
 
+        try:
+            lifetime_negative_feedback = post_statistics[3]["values"][0]["value"]
+        except KeyError:
+            lifetime_negative_feedback = 0
+
+        lifetime_post_reach_score = post_metrics_engine.pct_of_total_post_reach(int(lifetime_post_reach), int(fan_base))
+        lifetime_engaged_users_score = post_metrics_engine.pct_of_post_engagement(int(lifetime_engaged_users),
+                                                                                  int(lifetime_post_reach))
+        lifetime_negative_feedback_score = post_metrics_engine.pct_of_post_negative_feedback(
+            int(lifetime_negative_feedback),
+            int(lifetime_engaged_users))
+
+        post_dict[post_val['id']] = {"post_title": post_title,
+                                     "created_date": created_date,
+                                     "created_time": created_time,
+                                     "lifetime_post_reach_score": performance.performance_score(
+                                         lifetime_post_reach_score),
+                                     "lifetime_engaged_users_score": performance.performance_score(
+                                         lifetime_engaged_users_score),
+                                     "lifetime_negative_feedback_score": performance.performance_score(
+                                         lifetime_negative_feedback_score),
+                                     }
+
+    print("user_post: {}".format(post_dict))
     return render_template('dashboard_posts.html', user_posts=post_dict)
 
 
 @app.route('/dashboard/post_analysis/<string:post_id>')
 @login_required
 def dashboard_post_analysis(post_id):
-    page_post = graph.PageOrPost(post_id, current_user.access_token)
+    page_post = graph.PageOrPost(post_id, current_user.page_token)
 
     try:
         post_stats_reach = page_post.get_node_properties(
@@ -160,7 +201,9 @@ def dashboard_post_analysis(post_id):
 
         post_stats_engagement = page_post.get_node_properties(
             "id,message,created_time,shares,likes.summary(true).limit(0),comments.summary(true).limit(0)")
-    except Exception as ex:
+    except:
+        import traceback
+        traceback.print_exc()
         flash('We cannot connect to facebook. Please check your network connection and try again')
         return redirect(url_for('dashboard_accounts'))
 
@@ -244,7 +287,7 @@ def dashboard_analytics_weekly_report():
 @app.route('/dashboard/reports')
 @login_required
 def dashboard_reports():
-    return render_template('dashboard_advice_summary.html')
+    return render_template('dashboard_advice.html')
 
 
 @app.route('/dashboard/reports_advice')
@@ -274,10 +317,12 @@ def oauth_callback(provider):
 
     oauth = OAuthSignIn.get_provider(provider)
     social_id, social_username, social_email, account_data = oauth.callback()
-    page_id = account_data[0].get("id")
-    access_token = account_data[0].get("access_token")
+    # print('My Account Data: {}'.format(account_data))
 
-    # print('My Account Page_id: {} My Account Access_token:{}'.format(page_id, access_token))
+    page_id = account_data[0].get('id')
+    page_name = account_data[0].get('name')
+    page_category = account_data[0].get('category')
+    page_token = account_data[0].get('access_token')
 
     if social_id is None:
         flash('Authentication failed.')
@@ -289,7 +334,9 @@ def oauth_callback(provider):
             social_username=social_username,
             social_email=social_email,
             page_id=page_id,
-            access_token=access_token
+            page_name=page_name,
+            page_category=page_category,
+            page_token=page_token
         ).where(UserModel.email == current_user.email)
 
         if query.execute() < 1:
@@ -307,7 +354,7 @@ def set_properties():
     post_metrics_properties = {}
     page = None
     try:
-        page = graph.PageOrPost(current_user.page_id, current_user.access_token)
+        page = graph.PageOrPost(current_user.page_id, current_user.page_token)
     except Exception as ex:
         print(ex.args)
 
@@ -333,7 +380,7 @@ def set_properties():
     page_post = None
     for val in posts_stats:
         # print("post data: {}".format(val))
-        page_post = graph.PageOrPost(val['id'], current_user.access_token)
+        page_post = graph.PageOrPost(val['id'], current_user.page_token)
 
         date_time = date_parser.parse(val["created_time"])
         created_date = str(date_time.date())
@@ -400,7 +447,7 @@ def set_properties():
 def fetch_page_edge(edge_name):
     page = None
     try:
-        page = graph.PageOrPost(current_user.page_id, current_user.access_token)
+        page = graph.PageOrPost(current_user.page_id, current_user.page_token)
         # print("All Post nodes Page: {}".format(page.get_edge("feed")))
 
     except Exception as ex:
@@ -414,7 +461,7 @@ def fetch_page_edge(edge_name):
 def fetch_page_properties(fields):
     page = None
     try:
-        page = graph.PageOrPost(current_user.page_id, current_user.access_token)
+        page = graph.PageOrPost(current_user.page_id, current_user.page_token)
     except Exception as ex:
         print(ex.args)
         return None

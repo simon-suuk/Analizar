@@ -2,7 +2,6 @@
 {% block body %}
     <!-- Dashboard Codes Itself -->
     <div class="main-panel">
-
         {% with messages = get_flashed_messages(with_categories=true) %}
             <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
             {% if messages %}
@@ -46,7 +45,7 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="{{ url_for('dashboard_user') }}">
+                            <a href="">
                                 <p>Account</p>
                             </a>
                         </li>
@@ -79,19 +78,25 @@
                                 <br>
 
 
-                                <div class="col-sm-4 mt-2">
-                                    <div class="card-block">
-                                        {% if current_user.page_id is none %}
+                                {% if current_user.page_id is none %}
+                                    <div class="col-sm-4 mt-2">
+                                        <div class="card-block">
                                             <a href="{{ url_for('oauth_authorize', provider='facebook') }}"><img
                                                     src="{{ url_for('static', filename='img/facebook.svg') }}"
-                                                    width="100px" height="100px"></a>
-                                        {% else %}
+                                                    width="100px"
+                                                    height="100px"></a>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="col-sm-4 mt-2">
+                                        <div class="card-block">
                                             <a href="{{ url_for('dashboard_posts') }}"><img
                                                     src="{{ url_for('static', filename='img/facebook.svg') }}"
-                                                    width="100px" height="100px"></a>
-                                        {% endif %}
+                                                    width="100px"
+                                                    height="100px"></a>
+                                        </div>
                                     </div>
-                                </div>
+                                {% endif %}
 
                                 <div class="col-sm-4 mt-2">
                                     <div class="card-block">
@@ -119,6 +124,32 @@
                             </div>
 
                         </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    {% if current_user.page_id is none %}
+                        <div class="col-md-4">
+                            <a class="btn btn-primary7" href="{{ url_for('oauth_authorize', provider='facebook') }}" role="button"> <i class="fa fa-times"></i> Account Not
+                                Added</a>
+                        </div>
+                    {% else %}
+                        <div class="col-md-4">
+                            <a class="btn btn-primary6" href="{{ url_for('dashboard_posts') }}" role="button"> <i class="fa fa-check"></i> View
+                                Posts</a>
+                        </div>
+                    {% endif %}
+
+                    <div class="col-md-4">
+                        <a class="btn btn-primary7" href="#" role="button"> <i class="fa fa-times"></i> Account Not
+                            Added</a>
+                    </div>
+
+                    <div class="col-md-4">
+                        <a class="btn btn-primary7" href="#" role="button"> <i class="fa fa-times"></i> Account Not
+                            Added</a>
                     </div>
 
                 </div>

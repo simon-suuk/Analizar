@@ -47,8 +47,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-9">
-                        <p class="iflixwelcome">Welcome <strong>{{ current_user.social_username }}</strong>; Here is a
-                            summary of how the posts on your
+                        <p class="iflixwelcome">Welcome <strong>{{ current_user.page_name }}</strong>; Here is a summary
+                            of how the posts on your
                             Facebook Page are doing today</p>
                     </div>
                     <div class="col-md-3">
@@ -61,27 +61,27 @@
 
                 <div class="row">
                     <!-- Count item widget-->
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <!-- Placeholder to preserve space-->
                     </div>
 
                     <!-- Count item widget-->
-                    <div class="col-md-1">
-                        <button id="legend"></button> &nbsp; High
+                    <div class="col-md-2">
+                        <button id="legend"></button> &nbsp; Impressive
                     </div>
 
                     <!-- Count item widget-->
-                    <div class="col-md-1">
-                        <button id="legend1"></button> &nbsp; Ok
+                    <div class="col-md-2">
+                        <button id="legend1"></button> &nbsp; Satisfactory
 
                     </div>
 
                     <!-- Count item widget-->
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <button id="legend2"></button> &nbsp; Low
 
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <!-- DatePicker -->
                         <!-- <label for="dateofbirth"><input type="date" name="dateofbirth" id="dateofbirth"></label> -->
                     </div>
@@ -127,14 +127,19 @@
                                 <div class="col-md-2">
                                     <!-- <div class="name"><strong class="text-uppercase">23</strong></div> -->
                                 </div>
+
+                                <!-- <div class="col-md-3">
+                                    <a class="btn btn-primary" href="postreport.html" role="button">View Post Report</a>
+                                </div> -->
+
+
                             </div>
                             <hr>
 
 
                             <!-- First Post -->
                             {% for post_id, post in user_posts.items() %}
-                                {% if post.post_title is none %}
-                                {% else %}
+                                {% if post.post_title is not none %}
                                     <div class="row">
                                         <div class="col-md-4">
                                             <ul class="news list-unstyled">
@@ -143,7 +148,7 @@
                                                         <div class="title">
                                                             <i class="fa fa-paperclip"></i>
                                                             <a href="#">
-                                                                <strong class="ttt">{{ post.post_title|truncate(70, True) }}</strong>
+                                                                <strong class="ttt">{{ post.post_title|truncate(75, True) }}</strong>
                                                             </a>
                                                             <div class="update-date">{{ post.created_time }}<span
                                                                     class="updates-month">[{{ post.created_date }}]</span>
@@ -154,17 +159,47 @@
                                             </ul>
                                         </div>
 
-                                        <div class="col-md-2">
-                                            <div class="center-block" id="circle"></div>
-                                        </div>
+                                        {% if post.lifetime_negative_feedback_score == 'low' %}
+                                            <div class="col-md-2">
+                                                <div class="center-block" id="circle"></div>
+                                            </div>
+                                        {% elif post.lifetime_negative_feedback_score == 'ok' %}
+                                            <div class="col-md-2">
+                                                <div id="circle1"></div>
+                                            </div>
+                                        {% elif post.lifetime_negative_feedback_score == 'high' %}
+                                            <div class="col-md-2">
+                                                <div id="circle2"></div>
+                                            </div>
+                                        {% endif %}
 
-                                        <div class="col-md-2">
-                                            <div id="circle2"></div>
-                                        </div>
+                                        {% if post.lifetime_engaged_users_score == 'high' %}
+                                            <div class="col-md-2">
+                                                <div id="circle"></div>
+                                            </div>
+                                        {% elif post.lifetime_engaged_users_score == 'ok' %}
+                                            <div class="col-md-2">
+                                                <div id="circle1"></div>
+                                            </div>
+                                        {% elif post.lifetime_engaged_users_score == 'low' %}
+                                            <div class="col-md-2">
+                                                <div id="circle2"></div>
+                                            </div>
+                                        {% endif %}
 
-                                        <div class="col-md-2">
-                                            <div id="circle1"></div>
-                                        </div>
+                                        {% if post.lifetime_post_reach_score == 'high' %}
+                                            <div class="col-md-2">
+                                                <div id="circle"></div>
+                                            </div>
+                                        {% elif post.lifetime_post_reach_score == 'ok' %}
+                                            <div class="col-md-2">
+                                                <div id="circle1"></div>
+                                            </div>
+                                        {% elif post.lifetime_post_reach_score == 'low' %}
+                                            <div class="col-md-2">
+                                                <div id="circle2"></div>
+                                            </div>
+                                        {% endif %}
 
                                         <div class="col-md-2">
 
@@ -174,8 +209,8 @@
                                         </div>
 
                                     </div>
-                                    <!--hr-->
                                 {% endif %}
+                                <hr>
                             {% endfor %}
 
                         </div>

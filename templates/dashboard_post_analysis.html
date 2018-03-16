@@ -26,7 +26,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a href="">
-                                <p>Account</p>
+                                <p>{{ current_user.name }}</p>
                             </a>
                         </li>
 
@@ -44,7 +44,8 @@
         <div class="content">
             <div class="container-fluid">
 
-                <h5>Hey, this post is just <strong>16 Hours Old</strong> and can definetly still do better:</h5>
+                <h5>Hey {{ current_user.name }}, this post is just <strong>26 Hours Old</strong> and can still do
+                    better:</h5>
                 <br>
 
                 <div class="row">
@@ -54,8 +55,8 @@
                     <div class="col-md-2">
                         <div class="card">
                             <div class="header">
-                                <i class="fa fa-thumbs-up"></i>
-                                <bold>Engagement</bold>
+                                <i class="fa fa-check-square  ptitle"></i>
+                                <bold class="ptitle">Engagement</bold>
                                 <br>
                                 <br>
                                 <h1 class="title5">{{ post_metrics.lifetime_engaged_users }}</h1>
@@ -70,8 +71,8 @@
                     <div class="col-md-2">
                         <div class="card">
                             <div class="header">
-                                <i class="fa fa-thumbs-up"></i>
-                                <bold>Reach</bold>
+                                <i class="fa fa-bullhorn ptitle"></i>
+                                <bold class="ptitle">Reach</bold>
                                 <br>
                                 <br>
                                 <h1 class="title5">{{ post_metrics.lifetime_post_reach }}</h1>
@@ -83,14 +84,15 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="card">
                             <div class="header">
-                                <i class="fa fa-thumbs-up"></i>
-                                <bold>Negative Feedback</bold>
+                                <i class="fa fa-thumbs-down ptitle"></i>
+                                <bold class="ptitle">Negative Feedback</bold>
                                 <br>
                                 <br>
                                 <h1 class="title5">{{ post_metrics.lifetime_negative_feedback }}</h1>
+                                <br>
                                 <br>
                                 <hr>
                             </div>
@@ -98,11 +100,11 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="card">
                             <div class="header">
-                                <i class="fa fa-thumbs-up"></i>
-                                <bold>People That Engaged With Your Post</bold>
+                                <i class="fa fa-users ptitle"></i>
+                                <bold class="ptitle">People That Engaged With This Post The Most</bold>
                                 <br>
                                 <br>
                                 <ul>
@@ -126,30 +128,31 @@
                 <!-- Second ROw -->
 
                 <div class="row">
-
                     <div class="col-md-6">
                         <div class="card">
                             <div class="header">
 
-                                <strong>Simulate One of The Suggestions And See How It Improves Your Metrics</strong>
+                                <strong>Try One of The Suggestions And See How It Improves Your Metrics</strong>
+                                <hr>
                                 <ul>
                                     <br>
                                     <br>
                                     <li> Add An Hashtag such as #Fashion #Accra
-                                        <button class="btn btn-primary3" id="b">Simulate</button>
+                                        <button class="btn btn-primary3" id="a">Simulate</button>
                                     </li>
                                     <br>
                                     <br>
-                                    <li> Start A Conversation With People That Liked the post
+                                    <li> Start A Discussion With People That Engaged the post
                                         <button class="btn btn-primary3" id="c">Simulate</button>
                                     </li>
                                     <br>
                                     <br>
                                     <li> Place A Call To Action Button on Your Post
-                                        <button class="btn btn-primary3" id="a">Simulate</button>
+                                        <button class="btn btn-primary3" id="b">Simulate</button>
                                     </li>
                                     <br>
                                     <br>
+                                    <!-- <button class="btn btn-primary" id="b">Simulate</button> -->
                                     <br>
                                     <br>
                                     <br>
@@ -162,173 +165,70 @@
 
                         </div>
                     </div>
-
                     <div class="col-md-6">
                         <div class="card">
-
-                            <br>
-                            <strong class="simmtext">Metrics Simulation Engine</strong>
-                            <br>
-                            <br>
-                            <div id="pie"></div>
-
-                            <!-- <div style="width: 300px; text-align: center;">
-                                <button  class="buttons1" id="b" style="width:80px;">Simulate</button>
-                                <button class="buttons2" id="a" style="width:80px;">Simulate</button>
-                                <button class="buttons3" id="c" style="width:80px;">Simulate</button>
-                            </div> -->
-
-                            <br>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-
-                    var data = [{"letter": "Shares", "presses": 3}, {
-                        "letter": "Likes",
-                        "presses": 4
-                    }, {"letter": "Comments", "presses": 3}];
-                    console.log(data);
-
-                    var width = 300,
-                        height = 300,
-                        // Think back to 5th grade. Radius is 1/2 of the diameter. What is the limiting factor on the diameter? Width or height, whichever is smaller
-                        radius = Math.min(width, height) / 2;
-
-                    var color = d3.scaleOrdinal()
-                        .range(["#f9a11b", "#3ac569", "#e94e77"]);
-
-                    var pie = d3.pie()
-                        .value(function (d) {
-                            return d.presses;
-                        })(data);
-
-
-                    var arc = d3.arc()
-                        .outerRadius(radius - 10)
-                        .innerRadius(0);
-
-                    var labelArc = d3.arc()
-                        .outerRadius(radius - 40)
-                        .innerRadius(radius - 40);
-
-                    var svg = d3.select("#pie")
-                        .append("svg")
-                        .attr("width", width)
-                        .attr("height", height)
-                        .append("g")
-                        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")"); // Moving the center point. 1/2 the width and 1/2 the height
-
-                    var g = svg.selectAll("arc")
-                        .data(pie)
-                        .enter().append("g")
-                        .attr("class", "arc");
-
-                    g.append("path")
-                        .attr("d", arc)
-                        .style("fill", function (d) {
-                            return color(d.data.letter);
-                        })
-                        .each(function (d) {
-                            this._current = d;
-                        }); // store the initial angles;
-
-                    g.append("text")
-                        .attr("transform", function (d) {
-                            return "translate(" + labelArc.centroid(d) + ")";
-                        })
-                        .text(function (d) {
-                            return d.data.letter;
-                        })
-                        .style("fill", "#fff")
-                        .each(function (d) {
-                            this._current = d;
-                        }); // store the initial angles;
-
-                    function change() {
-                        var pie = d3.pie()
-                            .value(function (d) {
-                                return d.presses;
-                            })(data);
-                        path = d3.select("#pie").selectAll("path").data(pie); // Compute the new angles
-                        path.attr("d", arc); // redrawing the path
-                        d3.selectAll("text").data(pie).attr("transform", function (d) {
-                            return "translate(" + labelArc.centroid(d) + ")";
-                        }); // recomputing the centroid and translating the text accordingly.
-                    }
-
-                    d3.select("button#a")
-                        .on("click", function () {
-                            data[0].presses++;
-                            change();
-                        })
-                    d3.select("button#b")
-                        .on("click", function () {
-                            data[1].presses++;
-                            change();
-                        })
-                    d3.select("button#c")
-                        .on("click", function () {
-                            data[2].presses++;
-                            change();
-                        })
-
-                    function arcTween(a) {
-                        var i = d3.interpolate(this._current, a);
-                        this._current = i(0);
-                        return function (t) {
-                            return arc(i(t));
-                        };
-                    }
-
-                    function labelarcTween(a) {
-                        var i = d3.interpolate(this._current, a);
-                        this._current = i(0);
-                        return function (t) {
-                            return "translate(" + labelArc.centroid(i(t)) + ")";
-                        };
-                    }
-
-                    function change() {
-                        var pie = d3.pie()
-                            .value(function (d) {
-                                return d.presses;
-                            })(data);
-                        path = d3.select("#pie").selectAll("path").data(pie);
-                        //path.attr("d", arc);
-                        path.transition().duration(500).attrTween("d", arcTween); // Smooth transition with arcTween
-                        //d3.selectAll("text").data(pie).attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; });
-                        d3.selectAll("text").data(pie).transition().duration(500).attrTween("transform", labelarcTween); // Smooth transition with labelarcTween
-                    }
-
-
-                </script>
-
-                <!-- End of Javascript Graphs -->
-
-                <!-- End of Second ROw -->
-
-                <h5>We Know This Because From Historical Data:</h5>
-                <!-- Third ROw -->
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
                             <div class="header">
-                                <ul>
-                                    <li> Posts with Hashtags generally do well</li>
-                                    <br>
-                                    <li> Engaging With People that liked your post is best way to start engagement</li>
-                                    <br>
-                                    <li> Posts that resonates with a Trending topic tends to score high</li>
-                                    <br>
-                                    <li> People relate better with pictures</li>
-                                </ul>
+
+                                <strong class="simmtext">Metrics Simulation Engine</strong>
+                                <div class="styled-select slate">
+                                    <label>
+                                        <select name="time_decay">
+                                            <option>1 Hour Projection</option>
+                                            <option>5 Hours Projection</option>
+                                            <option>12 Hours Projection</option>
+                                            <option>24 Hours Projection</option>
+                                        </select>
+                                    </label>
+                                </div>
 
                                 <hr>
-                            </div>
+                                <br>
 
+                                <canvas id="myChart" width="400" height="400"></canvas>
+
+                                <script>
+                                    var ctx = document.getElementById("myChart").getContext('2d');
+                                    var engage = {{ post_metrics.lifetime_engaged_users }};
+                                    var reach = {{ post_metrics.lifetime_post_reach }};
+                                    var clicks = {{ post_metrics.clicks }};
+                                    var myChart = new Chart(ctx, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: ["Engagement", "Reach", "Clicks"],
+                                            datasets: [{
+                                                label: 'increases up to',
+                                                data: [engage, reach, clicks],
+                                                backgroundColor: [
+                                                    'rgba(255, 99, 132, 0.2)',
+                                                    'rgba(54, 162, 235, 0.2)',
+                                                    'rgba(255, 206, 86, 0.2)',
+                                                    'rgba(75, 192, 192, 0.2)',
+                                                    'rgba(153, 102, 255, 0.2)',
+                                                    'rgba(255, 159, 64, 0.2)'
+                                                ],
+                                                borderColor: [
+                                                    'rgba(255,99,132,1)',
+                                                    'rgba(54, 162, 235, 1)',
+                                                    'rgba(255, 206, 86, 1)',
+                                                    'rgba(75, 192, 192, 1)',
+                                                    'rgba(153, 102, 255, 1)',
+                                                    'rgba(255, 159, 64, 1)'
+                                                ],
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                yAxes: [{
+                                                    ticks: {
+                                                        beginAtZero: true
+                                                    }
+                                                }]
+                                            }
+                                        }
+                                    });
+                                </script>
+                            </div>
                         </div>
                     </div>
                 </div>

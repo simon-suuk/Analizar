@@ -287,7 +287,7 @@ def dashboard_analytics_weekly_report():
 @app.route('/dashboard/reports')
 @login_required
 def dashboard_reports():
-    return render_template('dashboard_advice.html')
+    return render_template('dashboard_advice_summary.html')
 
 
 @app.route('/dashboard/reports_advice')

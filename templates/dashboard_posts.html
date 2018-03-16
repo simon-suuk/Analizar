@@ -27,7 +27,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a href="">
-                                <p>Account</p>
+                                <p>{{ current_user.name }}</p>
                             </a>
                         </li>
 
@@ -47,9 +47,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-9">
-                        <p class="iflixwelcome">Welcome <strong>{{ current_user.page_name }}</strong>; Here is a summary
-                            of how the posts on your
-                            Facebook Page are doing today</p>
+                        <p class="iflixwelcome">Welcome <strong>{{ current_user.name|e }}</strong>; Here is a summary of
+                            how the posts on your page <strong>{{ current_user.page_name|e }}</strong>
+                            are doing today</p>
                     </div>
                     <div class="col-md-3">
                         <label for="dateofbirth"><input type="date" name="dateofbirth" id="dateofbirth"></label>
@@ -129,13 +129,12 @@
                                 </div>
 
                                 <!-- <div class="col-md-3">
-                                    <a class="btn btn-primary" href="postreport.html" role="button">View Post Report</a>
-                                </div> -->
+                                <a class="btn btn-primary" href="postreport.html" role="button">View Post Report</a>
+                            </div> -->
 
 
                             </div>
                             <hr>
-
 
                             <!-- First Post -->
                             {% for post_id, post in user_posts.items() %}
@@ -171,46 +170,43 @@
                                             <div class="col-md-2">
                                                 <div id="circle2"></div>
                                             </div>
-                                        {% endif %}
-
-                                        {% if post.lifetime_engaged_users_score == 'high' %}
-                                            <div class="col-md-2">
-                                                <div id="circle"></div>
-                                            </div>
-                                        {% elif post.lifetime_engaged_users_score == 'ok' %}
-                                            <div class="col-md-2">
-                                                <div id="circle1"></div>
-                                            </div>
-                                        {% elif post.lifetime_engaged_users_score == 'low' %}
-                                            <div class="col-md-2">
-                                                <div id="circle2"></div>
-                                            </div>
-                                        {% endif %}
-
-                                        {% if post.lifetime_post_reach_score == 'high' %}
-                                            <div class="col-md-2">
-                                                <div id="circle"></div>
-                                            </div>
-                                        {% elif post.lifetime_post_reach_score == 'ok' %}
-                                            <div class="col-md-2">
-                                                <div id="circle1"></div>
-                                            </div>
-                                        {% elif post.lifetime_post_reach_score == 'low' %}
-                                            <div class="col-md-2">
-                                                <div id="circle2"></div>
-                                            </div>
-                                        {% endif %}
+                                        {% endif %} {% if post.lifetime_engaged_users_score == 'high' %}
+                                        <div class="col-md-2">
+                                            <div id="circle"></div>
+                                        </div>
+                                    {% elif post.lifetime_engaged_users_score == 'ok' %}
+                                        <div class="col-md-2">
+                                            <div id="circle1"></div>
+                                        </div>
+                                    {% elif post.lifetime_engaged_users_score == 'low' %}
+                                        <div class="col-md-2">
+                                            <div id="circle2"></div>
+                                        </div>
+                                    {% endif %} {% if post.lifetime_post_reach_score == 'high' %}
+                                        <div class="col-md-2">
+                                            <div id="circle"></div>
+                                        </div>
+                                    {% elif post.lifetime_post_reach_score == 'ok' %}
+                                        <div class="col-md-2">
+                                            <div id="circle1"></div>
+                                        </div>
+                                    {% elif post.lifetime_post_reach_score == 'low' %}
+                                        <div class="col-md-2">
+                                            <div id="circle2"></div>
+                                        </div>
+                                    {% endif %}
 
                                         <div class="col-md-2">
 
                                             <a class="btn btn-primary"
                                                href="{{ url_for('dashboard_post_analysis', post_id=post_id) }}"
-                                               role="button">Post Analysis</a>
+                                               role="button">Post
+                                                Analysis</a>
                                         </div>
 
                                     </div>
+                                    <hr>
                                 {% endif %}
-                                <hr>
                             {% endfor %}
 
                         </div>

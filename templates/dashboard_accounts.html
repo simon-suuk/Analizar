@@ -46,7 +46,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a href="">
-                                <p>Account</p>
+                                <p>{{ current_user.name }}</p>
                             </a>
                         </li>
 
@@ -60,8 +60,6 @@
                 </div>
             </div>
         </nav>
-
-
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -72,7 +70,7 @@
                                 <h4 class="title"><b>Add Your Social Media Accounts: </b></h4>
                             </div>
 
-                            <div class="content">
+                            <div class="content row">
 
                                 <br>
                                 <br>
@@ -84,7 +82,12 @@
                                             <a href="{{ url_for('oauth_authorize', provider='facebook') }}"><img
                                                     src="{{ url_for('static', filename='img/facebook.svg') }}"
                                                     width="100px"
-                                                    height="100px"></a>
+                                                    height="100px"></a><br><br>
+                                            <a class="btn btn-primary7"
+                                               href="{{ url_for('oauth_authorize', provider='facebook') }}"
+                                               role="button"> <i
+                                                    class="fa fa-times"></i>
+                                                Account Not Added</a>
                                         </div>
                                     </div>
                                 {% else %}
@@ -93,7 +96,11 @@
                                             <a href="{{ url_for('dashboard_posts') }}"><img
                                                     src="{{ url_for('static', filename='img/facebook.svg') }}"
                                                     width="100px"
-                                                    height="100px"></a>
+                                                    height="100px"></a><br><br>
+                                            <a class="btn btn-primary6" href="{{ url_for('dashboard_posts') }}"
+                                               role="button"> <i
+                                                    class="fa fa-check"></i>
+                                                Account Added</a>
                                         </div>
                                     </div>
                                 {% endif %}
@@ -101,17 +108,23 @@
                                 <div class="col-sm-4 mt-2">
                                     <div class="card-block">
                                         <a href=""><img src="{{ url_for('static', filename='img/twitter.svg') }}"
-                                                        width="100px" height="100px"></a>
+                                                        width="100px"
+                                                        height="100px"></a><br><br>
+                                        <a class="btn btn-primary7" href="#" role="button"> <i class="fa fa-times"></i>
+                                            Account Not Added</a>
                                     </div>
                                 </div>
 
                                 <div class="col-sm-4 mt-2">
                                     <div class="card-block">
                                         <a href=""><img src="{{ url_for('static', filename='img/instagram.svg') }}"
-                                                        width="100px" height="100px"></a>
+                                                        width="100px" height="100px"></a><br><br>
+                                        <a class="btn btn-primary7" href="#" role="button"> <i class="fa fa-times"></i>
+                                            Account Not Added</a>
                                     </div>
                                 </div>
 
+                                <br><br>
 
                                 <div class="footer">
                                     <div class="legend"></div>
@@ -120,45 +133,12 @@
 
                                     <div class="stats"></div>
                                 </div>
-
                             </div>
-
                         </div>
                     </div>
-
                 </div>
-
-                <div class="row">
-
-                    {% if current_user.page_id is none %}
-                        <div class="col-md-4">
-                            <a class="btn btn-primary7" href="{{ url_for('oauth_authorize', provider='facebook') }}" role="button"> <i class="fa fa-times"></i> Account Not
-                                Added</a>
-                        </div>
-                    {% else %}
-                        <div class="col-md-4">
-                            <a class="btn btn-primary6" href="{{ url_for('dashboard_posts') }}" role="button"> <i class="fa fa-check"></i> View
-                                Posts</a>
-                        </div>
-                    {% endif %}
-
-                    <div class="col-md-4">
-                        <a class="btn btn-primary7" href="#" role="button"> <i class="fa fa-times"></i> Account Not
-                            Added</a>
-                    </div>
-
-                    <div class="col-md-4">
-                        <a class="btn btn-primary7" href="#" role="button"> <i class="fa fa-times"></i> Account Not
-                            Added</a>
-                    </div>
-
-                </div>
-
-
             </div>
         </div>
-
-
         <footer class="footer">
             <div class="container-fluid">
 

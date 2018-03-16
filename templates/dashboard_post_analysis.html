@@ -137,18 +137,20 @@
                                 <ul>
                                     <br>
                                     <br>
-                                    <li> Add An Hashtag such as #Fashion #Accra
-                                        <button class="btn btn-primary3" id="a">Simulate</button>
+                                    <li> Add an Hashtag such as #Fashion #Accra
+                                        <input class="btn btn-primary3" type="button" value="Simulate Results"
+                                               onclick="addData(2,4,2)">
+                                    </li>
+                                    <br>
+                                    <li> Start conversations with people that engaged the most
+                                        <input class="btn btn-primary3" type="button" value="Simulate Results"
+                                               onclick="addData(4,10,6)">
                                     </li>
                                     <br>
                                     <br>
-                                    <li> Start A Discussion With People That Engaged the post
-                                        <button class="btn btn-primary3" id="c">Simulate</button>
-                                    </li>
-                                    <br>
-                                    <br>
-                                    <li> Place A Call To Action Button on Your Post
-                                        <button class="btn btn-primary3" id="b">Simulate</button>
+                                    <li> Post was 100% text. Add picture or a short video
+                                        <input class="btn btn-primary3" type="button" value="Simulate Results"
+                                               onclick="addData(3,5,1)">
                                     </li>
                                     <br>
                                     <br>
@@ -172,60 +174,75 @@
                                 <strong class="simmtext">Metrics Simulation Engine</strong>
                                 <div class="styled-select slate">
                                     <label>
-                                        <select name="time_decay">
-                                            <option>1 Hour Projection</option>
-                                            <option>5 Hours Projection</option>
-                                            <option>12 Hours Projection</option>
-                                            <option>24 Hours Projection</option>
+                                        <select id="time_decay_factor">
+                                            <option value=0>1 Hour Projection</option>
+                                            <option value=1>5 Hours Projection</option>
+                                            <option value=2>12 Hours Projection</option>
+                                            <option value=3>24 Hours Projection</option>
                                         </select>
                                     </label>
                                 </div>
 
                                 <hr>
                                 <br>
+                                <script src="{{ url_for('static', filename='js/Chart.js') }}"></script>
 
                                 <canvas id="myChart" width="400" height="400"></canvas>
 
                                 <script>
+                                    "use strict";
                                     var ctx = document.getElementById("myChart").getContext('2d');
+
                                     var engage = {{ post_metrics.lifetime_engaged_users }};
                                     var reach = {{ post_metrics.lifetime_post_reach }};
                                     var clicks = {{ post_metrics.clicks }};
+
+                                    var data = {
+                                        labels: ["Engagement", "Reach", "Clicks"],
+                                        datasets: [{
+                                            label: 'total',
+                                            data: [engage, reach, clicks],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)',
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(255, 159, 64, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255,99,132,1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                                'rgba(255, 159, 64, 1)'
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    }
+                                    var options = {
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: true
+                                                }
+                                            }]
+                                        }
+                                    }
+
+                                    function addData(incEng, incR, incK) {
+                                        var t_d_f = document.getElementById("time_decay_factor").value;
+                                        myChart.data.datasets[0].data[0] = (engage + incEng) - t_d_f;
+                                        myChart.data.datasets[0].data[1] = (reach + incR) - t_d_f;
+                                        myChart.data.datasets[0].data[2] = (clicks + incK) - t_d_f;
+                                        myChart.update();
+                                    }
+
                                     var myChart = new Chart(ctx, {
                                         type: 'bar',
-                                        data: {
-                                            labels: ["Engagement", "Reach", "Clicks"],
-                                            datasets: [{
-                                                label: 'increases up to',
-                                                data: [engage, reach, clicks],
-                                                backgroundColor: [
-                                                    'rgba(255, 99, 132, 0.2)',
-                                                    'rgba(54, 162, 235, 0.2)',
-                                                    'rgba(255, 206, 86, 0.2)',
-                                                    'rgba(75, 192, 192, 0.2)',
-                                                    'rgba(153, 102, 255, 0.2)',
-                                                    'rgba(255, 159, 64, 0.2)'
-                                                ],
-                                                borderColor: [
-                                                    'rgba(255,99,132,1)',
-                                                    'rgba(54, 162, 235, 1)',
-                                                    'rgba(255, 206, 86, 1)',
-                                                    'rgba(75, 192, 192, 1)',
-                                                    'rgba(153, 102, 255, 1)',
-                                                    'rgba(255, 159, 64, 1)'
-                                                ],
-                                                borderWidth: 1
-                                            }]
-                                        },
-                                        options: {
-                                            scales: {
-                                                yAxes: [{
-                                                    ticks: {
-                                                        beginAtZero: true
-                                                    }
-                                                }]
-                                            }
-                                        }
+                                        data: data,
+                                        options: options
                                     });
                                 </script>
                             </div>

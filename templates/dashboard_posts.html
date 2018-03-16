@@ -147,10 +147,10 @@
                                                         <div class="title">
                                                             <i class="fa fa-paperclip"></i>
                                                             <a href="#">
-                                                                <strong class="ttt">{{ post.post_title|truncate(75, True) }}</strong>
+                                                                <strong class="ttt">{{ post.post_title|truncate(75, True)|e }}</strong>
                                                             </a>
-                                                            <div class="update-date">{{ post.created_time }}<span
-                                                                    class="updates-month">[{{ post.created_date }}]</span>
+                                                            <div class="update-date">{{ post.created_time|e }}<span
+                                                                    class="updates-month">[{{ post.created_date|e }}]</span>
                                                             </div>
                                                         </div>
                                                     </div>

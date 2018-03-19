@@ -4096,13 +4096,14 @@ select,twoc {
     background-color: #6550BA;
     border-color: #6550BA;
     color: #fff;
+    float:right;
 }
 
 .btn-primary6{
     background-color: #0077FF;
     border-color: #0077FF;
     color: #fff;
-    margin-left: 100px;
+    margin-left: 80px;
 }
 
 .btn-primary7{
